@@ -4,12 +4,22 @@ namespace UI
   {
     public void Display()
     {
-      throw new NotImplementedException();
+      Console.WriteLine("Displaying");
     }
 
     public MenuType UserChoice()
     {
-      throw new NotImplementedException();
+      string ans = Console.ReadLine();
+
+      switch (ans)
+      {
+        case "1":
+
+          return MenuType.MainMenu;
+        default:
+          return MenuType.Exit;
+      }
+
     }
   }
 }
