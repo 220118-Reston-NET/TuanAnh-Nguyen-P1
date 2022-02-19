@@ -9,6 +9,7 @@ namespace BL.Interfaces
       Inventory ImportNewProduct(Inventory p_inven);
       void ReplenishInventoryByID(string p_invenID, int p_quantity);
       List<Inventory> GetStoreInventoryByStoreID(string p_storeID);
+
     */
 
     /// <summary>
@@ -32,5 +33,7 @@ namespace BL.Interfaces
     /// <param name="p_storeID"></param>
     /// <returns></returns>
     List<Inventory> GetStoreInventoryByStoreID(string p_storeID);
+
+    Inventory GetInventoryByID(string p_invenID);
   }
 }

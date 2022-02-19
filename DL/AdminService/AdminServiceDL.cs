@@ -5,6 +5,11 @@ namespace DL.Implements
 {
   public class AdminServiceDL : IAdminServiceDL
   {
+    private readonly string _connectionString;
+    public AdminServiceDL(string p_connectionString)
+    {
+      _connectionString = p_connectionString;
+    }
     public Product AddNewProduct(Product p_prod)
     {
       throw new NotImplementedException();

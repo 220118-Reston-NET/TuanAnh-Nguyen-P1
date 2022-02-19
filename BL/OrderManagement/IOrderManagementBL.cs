@@ -44,9 +44,10 @@ namespace BL.Interfaces
       STORE MANAGEMENT:
       void RejectOrderByOrderID(string p_orderID);
       void AcceptOrderByOrderID(string p_orderID);
+      v
       Tracking AddTrackingToOrder(Tracking p_tracking);
       Tracking GetTrackingNumberByID(string p_trackingID);
-      void UpdateTrackingByTrackingID(Tracking p_trackingID);
+      void UpdateTracking(Tracking p_tracking);
       List<Order> GetAllOrdersByStoreID(string p_storeID);
       List<Tracking> GetAllTrackingByOrderID(string p_orderID);
     */
@@ -62,6 +63,12 @@ namespace BL.Interfaces
     /// </summary>
     /// <param name="p_orderID"></param>
     void AcceptOrderByOrderID(string p_orderID);
+
+    /// <summary>
+    /// Complete Order After Added Tracking NUmber and ship
+    /// </summary>
+    /// <param name="p_orderID"></param>
+    void CompleteOrderByOrderID(string p_orderID);
 
     /// <summary>
     /// Add a new tracking number to the order
@@ -81,7 +88,7 @@ namespace BL.Interfaces
     /// Update the tracking number
     /// </summary>
     /// <param name="p_trackingID"></param>
-    void UpdateTrackingByTrackingID(Tracking p_trackingID);
+    void UpdateTracking(Tracking p_tracking);
 
     /// <summary>
     /// Get All the Order of Stores
@@ -100,11 +107,19 @@ namespace BL.Interfaces
     /*
       ALL:
       List<Order> GetAllOrders();
+      Order GetOrderByOrderID(string p_orderID);
     */
     /// <summary>
     /// Get All Orders in the System
     /// </summary>
     /// <returns>All Orders</returns>
     List<Order> GetAllOrders();
+
+    /// <summary>
+    /// Get Order Detail by Order ID
+    /// </summary>
+    /// <param name="p_orderID"></param>
+    /// <returns></returns>
+    Order GetOrderByOrderID(string p_orderID);
   }
 }

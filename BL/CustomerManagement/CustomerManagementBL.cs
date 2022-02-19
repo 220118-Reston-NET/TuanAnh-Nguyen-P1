@@ -10,7 +10,7 @@ namespace BL.Implements
       throw new NotImplementedException();
     }
 
-    public CustomerProfile GetProfileByID(CustomerProfile p_customerID)
+    public CustomerProfile GetProfileByID(string p_customerID)
     {
       throw new NotImplementedException();
     }

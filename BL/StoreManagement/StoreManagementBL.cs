@@ -15,6 +15,11 @@ namespace BL.Implements
       throw new NotImplementedException();
     }
 
+    public List<StoreFrontProfile> SearchStoreByName(string p_storeName)
+    {
+      throw new NotImplementedException();
+    }
+
     public StoreFrontProfile UpdateStoreProfile(StoreFrontProfile p_store)
     {
       throw new NotImplementedException();

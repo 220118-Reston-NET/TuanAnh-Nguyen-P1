@@ -9,6 +9,7 @@ namespace BL.Interfaces
       StoreFrontProfile GetStoreProfileByID(string p_storeID);
       StoreFrontProfile UpdateStoreProfile(StoreFrontProfile p_store);
       List<StoreFrontProfile> GetAllStoresProfile();
+      List<StoreFrontProfile> SearchStoreByName(string p_storeName);
     */
 
     /// <summary>
@@ -30,5 +31,12 @@ namespace BL.Interfaces
     /// </summary>
     /// <returns></returns>
     List<StoreFrontProfile> GetAllStoresProfile();
+
+    /// <summary>
+    /// Search Stores By Store Name
+    /// </summary>
+    /// <param name="p_storeName"></param>
+    /// <returns></returns>
+    List<StoreFrontProfile> SearchStoreByName(string p_storeName);
   }
 }

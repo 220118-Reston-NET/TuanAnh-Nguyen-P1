@@ -5,6 +5,11 @@ namespace DL.Implements
 {
   public class InventoryManagementDL : IInventoryManagementDL
   {
+    private readonly string _connectionString;
+    public InventoryManagementDL(string p_connectionString)
+    {
+      _connectionString = p_connectionString;
+    }
     public List<Inventory> GetStoreInventoryByStoreID(string p_storeID)
     {
       throw new NotImplementedException();

@@ -25,6 +25,11 @@ namespace BL.Implements
       throw new NotImplementedException();
     }
 
+    public List<Product> SearchProductByName(string p_prodName)
+    {
+      throw new NotImplementedException();
+    }
+
     public Product UpdateProduct(Product p_prod)
     {
       throw new NotImplementedException();

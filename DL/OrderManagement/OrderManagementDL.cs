@@ -5,6 +5,11 @@ namespace DL.Implements
 {
   public class OrderManagementDL : IOrderManagementDL
   {
+    private readonly string _connectionString;
+    public OrderManagementDL(string p_connectionString)
+    {
+      _connectionString = p_connectionString;
+    }
     public void AcceptOrderByOrderID(string p_orderID)
     {
       throw new NotImplementedException();
@@ -45,7 +50,7 @@ namespace DL.Implements
       throw new NotImplementedException();
     }
 
-    public void UpdateTrackingByTrackingID(Tracking p_trackingID)
+    public void UpdateTracking(Tracking p_tracking)
     {
       throw new NotImplementedException();
     }

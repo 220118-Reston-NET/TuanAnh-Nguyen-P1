@@ -11,6 +11,7 @@ namespace BL.Interfaces
       Product GetProductByID(string p_prodID);
       Product UpdateProduct(Product p_prod);
       void DeleteProductByID(string p_prodID);
+      List<Product> SearchProductByName(string p_prodName);
     */
 
     /// <summary>
@@ -45,5 +46,12 @@ namespace BL.Interfaces
     /// </summary>
     /// <param name="p_prodID"></param>
     void DeleteProductByID(string p_prodID);
+
+    /// <summary>
+    /// Search Products By Product Name
+    /// </summary>
+    /// <param name="p_prodName"></param>
+    /// <returns></returns>
+    List<Product> SearchProductByName(string p_prodName);
   }
 }

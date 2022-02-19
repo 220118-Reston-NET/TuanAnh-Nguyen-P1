@@ -5,6 +5,11 @@ namespace DL.Implements
 {
   public class StoreManagementDL : IStoreManagementDL
   {
+    private readonly string _connectionString;
+    public StoreManagementDL(string p_connectionString)
+    {
+      _connectionString = p_connectionString;
+    }
     public List<StoreFrontProfile> GetAllStoresProfile()
     {
       throw new NotImplementedException();

@@ -10,7 +10,7 @@ namespace DL.Interfaces
     void RejectOrderByOrderID(string p_orderID);
     void AcceptOrderByOrderID(string p_orderID);
     Tracking AddTrackingToOrder(Tracking p_tracking);
-    void UpdateTrackingByTrackingID(Tracking p_trackingID);
+    void UpdateTracking(Tracking p_tracking);
     List<Tracking> GetAllTrackingByOrderID(string p_orderID);
     List<Order> GetAllOrders();
   }

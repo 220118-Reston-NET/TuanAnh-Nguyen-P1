@@ -6,7 +6,7 @@ namespace BL.Interfaces
   {
     /*
       CUSTOMER MANAGEMENT
-      CustomerProfile GetProfileByID(CustomerProfile p_customerID);
+      CustomerProfile GetProfileByID(string p_customerID);
       CustomerProfile UpdateProfile(CustomerProfile p_customer);
       List<CustomerProfile> GetAllCustomerProfile();
     */
@@ -16,7 +16,7 @@ namespace BL.Interfaces
     /// </summary>
     /// <param name="p_customerID"></param>
     /// <returns></returns>
-    CustomerProfile GetProfileByID(CustomerProfile p_customerID);
+    CustomerProfile GetProfileByID(string p_customerID);
 
     /// <summary>
     /// Update the profile 

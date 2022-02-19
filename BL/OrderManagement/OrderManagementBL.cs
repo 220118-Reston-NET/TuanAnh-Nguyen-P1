@@ -20,6 +20,11 @@ namespace BL.Implements
       throw new NotImplementedException();
     }
 
+    public void CompleteOrderByOrderID(string p_orderID)
+    {
+      throw new NotImplementedException();
+    }
+
     public Order CreateOrder(Order p_order)
     {
       throw new NotImplementedException();
@@ -45,6 +50,11 @@ namespace BL.Implements
       throw new NotImplementedException();
     }
 
+    public Order GetOrderByOrderID(string p_orderID)
+    {
+      throw new NotImplementedException();
+    }
+
     public Tracking GetTrackingNumberByID(string p_trackingID)
     {
       throw new NotImplementedException();
@@ -60,7 +70,7 @@ namespace BL.Implements
       throw new NotImplementedException();
     }
 
-    public void UpdateTrackingByTrackingID(Tracking p_trackingID)
+    public void UpdateTracking(Tracking p_tracking)
     {
       throw new NotImplementedException();
     }

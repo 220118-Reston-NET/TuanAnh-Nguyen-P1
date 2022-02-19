@@ -5,6 +5,11 @@ namespace DL.Implements
 {
   public class CustomerManagementDL : ICustomerManagementDL
   {
+    private readonly string _connectionString;
+    public CustomerManagementDL(string p_connectionString)
+    {
+      _connectionString = p_connectionString;
+    }
     public List<CustomerProfile> GetAllCustomerProfile()
     {
       throw new NotImplementedException();

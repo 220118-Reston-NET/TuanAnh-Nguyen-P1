@@ -5,6 +5,11 @@ namespace BL.Implements
 {
   public class InventoryManagementBL : IInventoryManagementBL
   {
+    public Inventory GetInventoryByID(string p_invenID)
+    {
+      throw new NotImplementedException();
+    }
+
     public List<Inventory> GetStoreInventoryByStoreID(string p_storeID)
     {
       throw new NotImplementedException();
