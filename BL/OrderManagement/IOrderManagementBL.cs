@@ -44,8 +44,8 @@ namespace BL.Interfaces
       STORE MANAGEMENT:
       void RejectOrderByOrderID(string p_orderID);
       void AcceptOrderByOrderID(string p_orderID);
-      v
-      Tracking AddTrackingToOrder(Tracking p_tracking);
+      void CompleteOrderByOrderID(string p_orderID);
+      Tracking AddTrackingToOrder(string p_orderID, Tracking p_tracking);
       Tracking GetTrackingNumberByID(string p_trackingID);
       void UpdateTracking(Tracking p_tracking);
       List<Order> GetAllOrdersByStoreID(string p_storeID);
@@ -75,7 +75,7 @@ namespace BL.Interfaces
     /// </summary>
     /// <param name="p_tracking"></param>
     /// <returns></returns>
-    Tracking AddTrackingToOrder(Tracking p_tracking);
+    Tracking AddTrackingToOrder(string p_orderID, Tracking p_tracking);
 
     /// <summary>
     /// Get tracking number by tracking ID 

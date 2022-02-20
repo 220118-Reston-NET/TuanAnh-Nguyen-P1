@@ -3,6 +3,8 @@ namespace UI
   public enum MenuType
   {
     MainMenu,
+    SignUp,
+    SignIn,
     Exit,
   }
   public interface IMenu

@@ -1,3 +1,4 @@
+using System.Data.SqlClient;
 using DL.Interfaces;
 using Model;
 
@@ -12,12 +13,60 @@ namespace DL.Implements
     }
     public List<CustomerProfile> GetAllCustomerProfile()
     {
-      throw new NotImplementedException();
+      string _sqlQuery = @"SELECT cusID, cusFName, cusLName, cusAddress, cusEmail, cusPhoneNo, dateOfBirth
+                          FROM Customers;";
+      List<CustomerProfile> _listOfCustomers = new List<CustomerProfile>();
+
+      using (SqlConnection conn = new SqlConnection(_connectionString))
+      {
+        conn.Open();
+
+        SqlCommand command = new SqlCommand(_sqlQuery, conn);
+
+        SqlDataReader reader = command.ExecuteReader();
+
+        while (reader.Read())
+        {
+          _listOfCustomers.Add(new CustomerProfile()
+          {
+            CustomerID = reader.GetGuid(0),
+            FirstName = reader.GetString(1),
+            LastName = reader.GetString(2),
+            Address = reader.GetString(3),
+            Email = reader.GetString(4),
+            PhoneNumber = reader.GetString(5),
+            DateOfBirth = reader.GetDateTime(6)
+          });
+        }
+      }
+
+      return _listOfCustomers;
     }
 
     public CustomerProfile UpdateProfile(CustomerProfile p_customer)
     {
-      throw new NotImplementedException();
+      string _sqlQuery = @"UPDATE Customers
+                          SET cusFName=@cusFName, cusLName=@cusLName, cusAddress=@cusAddress, cusEmail=@cusEmail, cusPhoneNo=@cusPhoneNo, dateOfBirth=@dateOfBirth
+                          WHERE cusID=cusID;";
+
+      using (SqlConnection conn = new SqlConnection(_connectionString))
+      {
+        conn.Open();
+
+        SqlCommand command = new SqlCommand(_sqlQuery, conn);
+
+        command.Parameters.AddWithValue("@cusFName", p_customer.FirstName);
+        command.Parameters.AddWithValue("@cusLName", p_customer.LastName);
+        command.Parameters.AddWithValue("@cusAddress", p_customer.Address);
+        command.Parameters.AddWithValue("@cusEmail", p_customer.Email);
+        command.Parameters.AddWithValue("@cusPhoneNo", p_customer.PhoneNumber);
+        command.Parameters.AddWithValue("@dateOfBirth", p_customer.DateOfBirth);
+        command.Parameters.AddWithValue("@cusID", p_customer.CustomerID);
+
+        command.ExecuteNonQuery();
+      }
+
+      return p_customer;
     }
   }
 }

@@ -7,8 +7,10 @@ namespace BL.Interfaces
     /*
       STORE INVENTORY MANAGEMENT
       Inventory ImportNewProduct(Inventory p_inven);
-      void ReplenishInventoryByID(string p_invenID, int p_quantity);
+      void ReplenishInventoryByID(Inventory p_inven);
       List<Inventory> GetStoreInventoryByStoreID(string p_storeID);
+      Inventory GetInventory(Inventory p_inven);
+      List<Inventory> GetAllInventory();
 
     */
 
@@ -25,7 +27,7 @@ namespace BL.Interfaces
     /// <param name="p_invenID"></param>
     /// <param name="p_quantity"></param>
     /// <returns></returns>
-    void ReplenishInventoryByID(string p_invenID, int p_quantity);
+    void ReplenishInventoryByID(Inventory p_inven);
 
     /// <summary>
     /// Get all Inventory of the store by store ID
@@ -34,6 +36,17 @@ namespace BL.Interfaces
     /// <returns></returns>
     List<Inventory> GetStoreInventoryByStoreID(string p_storeID);
 
-    Inventory GetInventoryByID(string p_invenID);
+    /// <summary>
+    /// Get Inventory Detail
+    /// </summary>
+    /// <param name="p_invenID"></param>
+    /// <returns></returns>
+    Inventory GetInventory(Inventory p_inven);
+
+    /// <summary>
+    /// Get All Inventories
+    /// </summary>
+    /// <returns></returns>
+    List<Inventory> GetAllInventory();
   }
 }

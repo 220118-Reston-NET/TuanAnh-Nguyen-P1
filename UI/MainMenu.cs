@@ -6,8 +6,11 @@ namespace UI
   {
     public void Display()
     {
-      Console.WriteLine("Displaying");
-      Console.WriteLine("[1] - Password");
+      Console.WriteLine("Welcome to my Project 1!");
+      Console.WriteLine("Please use these options below to start:");
+      Console.WriteLine("[1] - Sign Up");
+      Console.WriteLine("[2] - Sign In");
+      Console.WriteLine("-----------------------------------------");
       Console.WriteLine("[0] - Exit");
     }
 
@@ -20,16 +23,9 @@ namespace UI
         case "0":
           return MenuType.Exit;
         case "1":
-          Console.WriteLine("Enter password:");
-          string password = Console.ReadLine();
-
-          GeneratePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-
-          Console.WriteLine($"password: {password}\npasswordHash: {Encoding.UTF8.GetString(passwordHash)}\npasswordSalt: {Encoding.UTF8.GetString(passwordSalt)}");
-
-          Console.WriteLine("Please press enter to continue");
-          Console.ReadLine();
-          return MenuType.MainMenu;
+          return MenuType.SignUp;
+        case "2":
+          return MenuType.SignIn;
         default:
           Console.WriteLine("Please press enter to continue");
           Console.ReadLine();

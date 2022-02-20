@@ -99,12 +99,12 @@ namespace APIPortal.Controllers
 
     // GET: api/Inventory/5
     [HttpGet(RouteConfigs.Inventory)]
-    public IActionResult GetInventoryByID(string p_invenID)
+    public IActionResult GetInventoryByID([FromBody] Inventory p_inven)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Inventory);
-        return Ok(_invenBL.GetInventoryByID(p_invenID));
+        return Ok(_invenBL.GetInventory(p_inven));
       }
       catch (Exception e)
       {
@@ -116,12 +116,12 @@ namespace APIPortal.Controllers
 
     // PUT: api/Inventory/5
     [HttpPut(RouteConfigs.Inventory)]
-    public IActionResult ReplenishInventoryByID(string p_invenID, int quantity)
+    public IActionResult ReplenishInventoryByID([FromBody] Inventory p_inven)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Inventory);
-        _invenBL.ReplenishInventoryByID(p_invenID, quantity);
+        _invenBL.ReplenishInventoryByID(p_inven);
         return Ok();
       }
       catch (Exception e)
