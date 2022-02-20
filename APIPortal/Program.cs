@@ -20,7 +20,7 @@ builder.Services.AddScoped<IAdminServiceDL>(repo => new AdminServiceDL(builder.C
 builder.Services.AddScoped<IOrderManagementDL>(repo => new OrderManagementDL(builder.Configuration.GetConnectionString("Reference2DB")));
 builder.Services.AddScoped<IInventoryManagementDL>(repo => new InventoryManagementDL(builder.Configuration.GetConnectionString("Reference2DB")));
 
-builder.Services.AddScoped<ICustomerMangementBL, CustomerManagementBL>();
+builder.Services.AddScoped<ICustomerManagementBL, CustomerManagementBL>();
 builder.Services.AddScoped<IStoreManagementBL, StoreManagementBL>();
 builder.Services.AddScoped<IAdminServiceBL, AdminServiceBL>();
 builder.Services.AddScoped<IOrderManagementBL, OrderManagementBL>();

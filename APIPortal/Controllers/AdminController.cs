@@ -33,13 +33,13 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Products);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 
     // GET: api/Product/5
     [HttpGet(RouteConfigs.Product)]
-    public IActionResult GetProductByID(string id)
+    public IActionResult GetProductByID(Guid id)
     {
       try
       {
@@ -50,7 +50,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Product);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 
@@ -61,13 +61,13 @@ namespace APIPortal.Controllers
       try
       {
         Log.Information("Route: " + RouteConfigs.Product);
-        return Ok(_adminBL.AddNewProduct(p_prod));
+        return Created("Succesfully created a new product!", _adminBL.AddNewProduct(p_prod));
       }
       catch (Exception e)
       {
         Log.Warning("Route: " + RouteConfigs.Product);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return StatusCode(406, e);
       }
     }
 
@@ -84,7 +84,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Product);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return StatusCode(406, e);
       }
     }
 

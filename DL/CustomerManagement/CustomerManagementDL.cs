@@ -11,6 +11,33 @@ namespace DL.Implements
     {
       _connectionString = p_connectionString;
     }
+
+    public CustomerProfile AddNewCustomerProfile(CustomerProfile p_cus)
+    {
+      string _sqlQuery = @"INSERT INTO Customers
+                          (cusID, cusFName, cusLName, cusAddress, cusEmail, cusPhoneNo, dateOfBirth)
+                          VALUES(@cusID, @cusFName, @cusLName, @cusAddress, @cusEmail, @cusPhoneNo, @dateOfBirth);";
+
+      using (SqlConnection conn = new SqlConnection(_connectionString))
+      {
+        conn.Open();
+
+        SqlCommand command = new SqlCommand(_sqlQuery, conn);
+
+        command.Parameters.AddWithValue("@cusID", p_cus.CustomerID);
+        command.Parameters.AddWithValue("@cusFName", p_cus.FirstName);
+        command.Parameters.AddWithValue("@cusLName", p_cus.LastName);
+        command.Parameters.AddWithValue("@cusAddress", p_cus.Address);
+        command.Parameters.AddWithValue("@cusEmail", p_cus.Email);
+        command.Parameters.AddWithValue("@cusPhoneNo", p_cus.PhoneNumber);
+        command.Parameters.AddWithValue("@dateOfBirth", p_cus.DateOfBirth);
+
+        command.ExecuteNonQuery();
+      }
+
+      return p_cus;
+    }
+
     public List<CustomerProfile> GetAllCustomerProfile()
     {
       string _sqlQuery = @"SELECT cusID, cusFName, cusLName, cusAddress, cusEmail, cusPhoneNo, dateOfBirth
@@ -47,7 +74,7 @@ namespace DL.Implements
     {
       string _sqlQuery = @"UPDATE Customers
                           SET cusFName=@cusFName, cusLName=@cusLName, cusAddress=@cusAddress, cusEmail=@cusEmail, cusPhoneNo=@cusPhoneNo, dateOfBirth=@dateOfBirth
-                          WHERE cusID=cusID;";
+                          WHERE cusID=@cusID;";
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {

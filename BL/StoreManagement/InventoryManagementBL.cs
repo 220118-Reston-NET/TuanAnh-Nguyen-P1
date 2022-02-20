@@ -22,13 +22,17 @@ namespace BL.Implements
       return GetAllInventory().Find(p => p.ProductID.Equals(p_inven.ProductID) && p.StoreID.Equals(p_inven.StoreID));
     }
 
-    public List<Inventory> GetStoreInventoryByStoreID(string p_storeID)
+    public List<Inventory> GetStoreInventoryByStoreID(Guid p_storeID)
     {
       return GetAllInventory().FindAll(p => p.StoreID.Equals(p_storeID));
     }
 
     public Inventory ImportNewProduct(Inventory p_inven)
     {
+      if (GetStoreInventoryByStoreID(p_inven.StoreID).Any(p => p.ProductID.Equals(p_inven.ProductID)))
+      {
+        throw new Exception("Cannot import this product due to it already in the store! Please check the inventory!");
+      }
       return _repo.ImportNewProduct(p_inven);
     }
 

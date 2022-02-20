@@ -65,7 +65,7 @@ namespace DL.Implements
     {
       string _sqlQuery = @"UPDATE Inventory
                           SET quantity=@quantity
-                          WHERE storeID=@storeID, productID=@productID;";
+                          WHERE storeID=@storeID AND productID=@productID;";
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {

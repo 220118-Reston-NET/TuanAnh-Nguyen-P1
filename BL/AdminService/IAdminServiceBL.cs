@@ -8,7 +8,7 @@ namespace BL.Interfaces
       ADMIN SERVICE
       Product AddNewProduct(Product p_prod);
       List<Product> GetAllProducts();
-      Product GetProductByID(string p_prodID);
+      Product GetProductByID(Guid p_prodID);
       Product UpdateProduct(Product p_prod);
       List<Product> SearchProductByName(string p_prodName);
     */
@@ -31,7 +31,7 @@ namespace BL.Interfaces
     /// </summary>
     /// <param name="p_prodID"></param>
     /// <returns>Product Detail</returns>
-    Product GetProductByID(string p_prodID);
+    Product GetProductByID(Guid p_prodID);
 
     /// <summary>
     /// Update Product Detail

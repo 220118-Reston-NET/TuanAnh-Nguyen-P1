@@ -11,7 +11,7 @@ namespace DL.Implements
     {
       _connectionString = p_connectionString;
     }
-    public void AcceptOrderByOrderID(string p_orderID)
+    public void AcceptOrderByOrderID(Guid p_orderID)
     {
       string _sqlQuery = @"UPDATE Orders
                           SET orderStatus=@orderStatus
@@ -47,7 +47,7 @@ namespace DL.Implements
           command = new SqlCommand(_sqlQuery, conn);
 
           command.Parameters.AddWithValue("@productID", item.ProductID);
-          command.Parameters.AddWithValue("@orderID", item.OrderID);
+          command.Parameters.AddWithValue("@orderID", p_order.OrderID);
           command.Parameters.AddWithValue("@quantity", item.Quantity);
           command.Parameters.AddWithValue("@priceAtCheckedOut", item.PriceAtCheckedOut);
 
@@ -58,7 +58,7 @@ namespace DL.Implements
       return p_order.Cart;
     }
 
-    public Tracking AddTrackingToOrder(string p_orderID, Tracking p_tracking)
+    public Tracking AddTrackingToOrder(Guid p_orderID, Tracking p_tracking)
     {
       string _sqlQuery = @"INSERT INTO Tracking
                           (trackingID, orderID, trackingNumber)
@@ -82,7 +82,7 @@ namespace DL.Implements
       return p_tracking;
     }
 
-    public void CancelOrderByOrderID(string p_orderID)
+    public void CancelOrderByOrderID(Guid p_orderID)
     {
       string _sqlQuery = @"UPDATE Orders
                           SET orderStatus=@orderStatus
@@ -101,7 +101,7 @@ namespace DL.Implements
       }
     }
 
-    public void CompleteOrderByOrderID(string p_orderID)
+    public void CompleteOrderByOrderID(Guid p_orderID)
     {
       string _sqlQuery = @"UPDATE Orders
                           SET orderStatus=@orderStatus
@@ -139,7 +139,7 @@ namespace DL.Implements
         command.Parameters.AddWithValue("@cusID", p_order.CustomerID);
         command.Parameters.AddWithValue("@storeID", p_order.StoreID);
         command.Parameters.AddWithValue("@totalPrice", p_order.TotalPrice);
-        command.Parameters.AddWithValue("@orderStatus", p_order.Status);
+        command.Parameters.AddWithValue("@orderStatus", "Order Placed");
         command.Parameters.AddWithValue("@createdAt", p_order.createdAt);
 
         command.ExecuteNonQuery();
@@ -175,8 +175,8 @@ namespace DL.Implements
             TotalPrice = reader.GetDecimal(3),
             Status = reader.GetString(4),
             createdAt = reader.GetDateTime(5),
-            Cart = GetLineItemsByOrderID(reader.GetGuid(0).ToString()),
-            Shipments = GetAllTrackingByOrderID(reader.GetGuid(0).ToString())
+            Cart = GetLineItemsByOrderID(reader.GetGuid(0)),
+            Shipments = GetAllTrackingByOrderID(reader.GetGuid(0))
           });
         }
       }
@@ -184,7 +184,7 @@ namespace DL.Implements
       return _listOfOrders;
     }
 
-    public List<Tracking> GetAllTrackingByOrderID(string p_orderID)
+    public List<Tracking> GetAllTrackingByOrderID(Guid p_orderID)
     {
       string _sqlQuery = @"SELECT trackingID, trackingNumber
                             FROM Tracking
@@ -214,7 +214,7 @@ namespace DL.Implements
       return _listOfTracking;
     }
 
-    public List<LineItem> GetLineItemsByOrderID(string p_orderID)
+    public List<LineItem> GetLineItemsByOrderID(Guid p_orderID)
     {
       string _sqlQuery = @"SELECT productID, quantity, priceAtCheckedOut
                           FROM LineItems
@@ -235,7 +235,7 @@ namespace DL.Implements
         {
           _cart.Add(new LineItem()
           {
-            OrderID = Guid.Parse(p_orderID),
+            OrderID = p_orderID,
             ProductID = reader.GetGuid(0),
             Quantity = reader.GetInt32(1),
             PriceAtCheckedOut = reader.GetDecimal(2)
@@ -246,7 +246,7 @@ namespace DL.Implements
       return _cart;
     }
 
-    public void RejectOrderByOrderID(string p_orderID)
+    public void RejectOrderByOrderID(Guid p_orderID)
     {
       string _sqlQuery = @"UPDATE Orders
                           SET orderStatus=@orderStatus
@@ -269,7 +269,7 @@ namespace DL.Implements
     {
       string _sqlQuery = @"UPDATE Inventory
                           SET quantity=quantity - @quantity
-                          WHERE storeID=@storeID, productID=@productID;";
+                          WHERE storeID=@storeID AND productID=@productID;";
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {

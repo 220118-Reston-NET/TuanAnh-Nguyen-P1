@@ -33,7 +33,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.SearchProduct);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 
@@ -50,7 +50,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.SearchStore);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 

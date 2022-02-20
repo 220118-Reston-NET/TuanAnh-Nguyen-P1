@@ -39,13 +39,13 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Stores);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 
     // GET: api/Store/5
     [HttpGet(RouteConfigs.StoreProfile)]
-    public IActionResult GetStoreProfileByStoreID(string p_storeID)
+    public IActionResult GetStoreProfileByStoreID(Guid p_storeID)
     {
       try
       {
@@ -56,18 +56,35 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.StoreProfile);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 
-    // PUT: api/Store/5
+    // PUT: api/Store
     [HttpPut(RouteConfigs.StoreProfile)]
     public IActionResult UpdateStoreProfile([FromBody] StoreFrontProfile p_store)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.StoreProfile);
-        return Ok(_storeBL.UpdateStoreProfile(p_store));
+        return Accepted(_storeBL.UpdateStoreProfile(p_store));
+      }
+      catch (Exception e)
+      {
+        Log.Warning("Route: " + RouteConfigs.StoreProfile);
+        Log.Warning(e.Message);
+        return StatusCode(406, e);
+      }
+    }
+
+    // POST: api/Store
+    [HttpPost(RouteConfigs.StoreProfile)]
+    public IActionResult AddNewStoreProfile([FromBody] StoreFrontProfile p_store)
+    {
+      try
+      {
+        Log.Information("Route: " + RouteConfigs.StoreProfile);
+        return Created("Successfully created new store front profile!", _storeBL.AddNewStoreFrontProfile(p_store));
       }
       catch (Exception e)
       {
@@ -82,7 +99,7 @@ namespace APIPortal.Controllers
     */
     // GET: api/Inventories
     [HttpGet(RouteConfigs.Inventories)]
-    public IActionResult GetAllStoreInventories(string p_storeID)
+    public IActionResult GetAllStoreInventories(Guid p_storeID)
     {
       try
       {
@@ -93,7 +110,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Inventories);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 
@@ -110,7 +127,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Inventory);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 
@@ -128,7 +145,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Inventory);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return StatusCode(406, e);
       }
     }
 
@@ -145,7 +162,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Inventory);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return StatusCode(406, e);
       }
     }
 
@@ -154,7 +171,7 @@ namespace APIPortal.Controllers
     */
     // GET: api/Orders
     [HttpGet(RouteConfigs.StoreOrders)]
-    public IActionResult GetAllStoreOrders(string p_storeID)
+    public IActionResult GetAllStoreOrders(Guid p_storeID)
     {
       try
       {
@@ -165,13 +182,30 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.StoreOrders);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
+      }
+    }
+
+    // GET: api/Orders
+    [HttpGet(RouteConfigs.StoreOrdersFilter)]
+    public IActionResult GetAllStoreOrdersWithFilter(Guid p_storeID, string p_filter)
+    {
+      try
+      {
+        Log.Information("Route: " + RouteConfigs.StoreOrdersFilter);
+        return Ok(_orderBL.GetAllOrdersByStoreIDWithFilter(p_storeID, p_filter));
+      }
+      catch (Exception e)
+      {
+        Log.Warning("Route: " + RouteConfigs.StoreOrdersFilter);
+        Log.Warning(e.Message);
+        return NotFound(e);
       }
     }
 
     // GET: api/Order/5
     [HttpGet(RouteConfigs.StoreOrder)]
-    public IActionResult GetStoreOrderByID(string p_orderID)
+    public IActionResult GetStoreOrderByID(Guid p_orderID)
     {
       try
       {
@@ -182,13 +216,13 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.StoreOrder);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 
     // PUT: api/Order/5
     [HttpPut(RouteConfigs.AcceptOrder)]
-    public IActionResult AcceptOrderByOrderID(string p_orderID)
+    public IActionResult AcceptOrderByOrderID(Guid p_orderID)
     {
       try
       {
@@ -200,13 +234,13 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.AcceptOrder);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return StatusCode(406, e);
       }
     }
 
     // PUT: api/Order/5
     [HttpPut(RouteConfigs.RejectOrder)]
-    public IActionResult RejectOrderByOrderID(string p_orderID)
+    public IActionResult RejectOrderByOrderID(Guid p_orderID)
     {
       try
       {
@@ -218,13 +252,13 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.RejectOrder);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return StatusCode(406, e);
       }
     }
 
     // PUT: api/Order/5
     [HttpPut(RouteConfigs.CompleteOrder)]
-    public IActionResult CompleteOrderByOrderID(string p_orderID)
+    public IActionResult CompleteOrderByOrderID(Guid p_orderID)
     {
       try
       {
@@ -236,13 +270,13 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.CompleteOrder);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return StatusCode(406, e);
       }
     }
 
     // GET: api/Trackings
     [HttpGet(RouteConfigs.Trackings)]
-    public IActionResult GetAllTrackingsByOrderID(string p_orderID)
+    public IActionResult GetAllTrackingsByOrderID(Guid p_orderID)
     {
       try
       {
@@ -253,13 +287,13 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Trackings);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 
     // GET: api/Tracking/5
     [HttpGet(RouteConfigs.Tracking)]
-    public IActionResult GetTrackingDetailByID(string p_trackingID)
+    public IActionResult GetTrackingDetailByID(Guid p_trackingID)
     {
       try
       {
@@ -270,7 +304,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Tracking);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 
@@ -288,7 +322,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Tracking);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return StatusCode(406, e);
       }
     }
 

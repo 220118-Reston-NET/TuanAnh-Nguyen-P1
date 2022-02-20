@@ -11,6 +11,29 @@ namespace DL.Implements
     {
       _connectionString = p_connectionString;
     }
+
+    public StoreFrontProfile AddNewStoreFrontProfile(StoreFrontProfile p_store)
+    {
+      string _sqlQuery = @"INSERT INTO StoreFronts
+                          (storeID, storeName, storeAddress)
+                          VALUES(@storeID, @storeName, @storeAddress);";
+
+      using (SqlConnection conn = new SqlConnection(_connectionString))
+      {
+        conn.Open();
+
+        SqlCommand command = new SqlCommand(_sqlQuery, conn);
+
+        command.Parameters.AddWithValue("@storeID", p_store.StoreID);
+        command.Parameters.AddWithValue("@storeName", p_store.Name);
+        command.Parameters.AddWithValue("@storeAddress", p_store.Address);
+
+        command.ExecuteNonQuery();
+      }
+
+      return p_store;
+    }
+
     public List<StoreFrontProfile> GetAllStoresProfile()
     {
       string _sqlQuery = @"SELECT storeID, storeName, storeAddress

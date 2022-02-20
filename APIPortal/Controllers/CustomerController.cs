@@ -14,9 +14,9 @@ namespace APIPortal.Controllers
   [ApiController]
   public class CustomerController : ControllerBase
   {
-    private ICustomerMangementBL _cusBL;
+    private ICustomerManagementBL _cusBL;
     private IOrderManagementBL _orderBL;
-    public CustomerController(ICustomerMangementBL p_cusBL, IOrderManagementBL p_orderBL)
+    public CustomerController(ICustomerManagementBL p_cusBL, IOrderManagementBL p_orderBL)
     {
       _cusBL = p_cusBL;
       _orderBL = p_orderBL;
@@ -38,13 +38,13 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Customers);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 
     // GET: api/Customer/5
     [HttpGet(RouteConfigs.CustomerProfile)]
-    public IActionResult GetCustomerByID(string p_cusID)
+    public IActionResult GetCustomerByID(Guid p_cusID)
     {
       try
       {
@@ -55,7 +55,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.CustomerProfile);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 
@@ -72,7 +72,24 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.CustomerProfile);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return StatusCode(406, e);
+      }
+    }
+
+    // POST: api/Customer
+    [HttpPost(RouteConfigs.CustomerProfile)]
+    public IActionResult AddProfile([FromBody] CustomerProfile p_cus)
+    {
+      try
+      {
+        Log.Information("Route: " + RouteConfigs.CustomerProfile);
+        return Created("Succesfully created new customer profile!", _cusBL.AddNewCustomerProfile(p_cus));
+      }
+      catch (Exception e)
+      {
+        Log.Warning("Route: " + RouteConfigs.CustomerProfile);
+        Log.Warning(e.Message);
+        return StatusCode(406, e);
       }
     }
 
@@ -86,13 +103,13 @@ namespace APIPortal.Controllers
       try
       {
         Log.Information("Route: " + RouteConfigs.CustomerOrder);
-        return Ok(_orderBL.CreateOrder(p_order));
+        return Created("Succesfully created new order!", _orderBL.CreateOrder(p_order));
       }
       catch (Exception e)
       {
         Log.Warning("Route: " + RouteConfigs.CustomerOrder);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return StatusCode(406, e);
       }
     }
 
@@ -109,13 +126,13 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.CustomerOrder);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return StatusCode(406, e);
       }
     }
 
     // GET: api/Orders
     [HttpGet(RouteConfigs.CustomerOrders)]
-    public IActionResult GetAllCustomerOrders(string p_cusID)
+    public IActionResult GetAllCustomerOrders(Guid p_cusID)
     {
       try
       {
@@ -126,13 +143,30 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.CustomerOrders);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
+      }
+    }
+
+    // GET: api/Orders
+    [HttpGet(RouteConfigs.CustomerOrdersFilter)]
+    public IActionResult GetAllCustomerOrdersWithFilter(Guid p_cusID, string p_filter)
+    {
+      try
+      {
+        Log.Information("Route: " + RouteConfigs.CustomerOrdersFilter);
+        return Ok(_orderBL.GetAllOrdersByCustomerIDWithFilter(p_cusID, p_filter));
+      }
+      catch (Exception e)
+      {
+        Log.Warning("Route: " + RouteConfigs.CustomerOrdersFilter);
+        Log.Warning(e.Message);
+        return NotFound(e);
       }
     }
 
     // GET: api/Order/5
     [HttpGet(RouteConfigs.CustomerOrder)]
-    public IActionResult GetCustomerOrderByOrderID(string p_orderID)
+    public IActionResult GetCustomerOrderByOrderID(Guid p_orderID)
     {
       try
       {
@@ -143,7 +177,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.CustomerOrder);
         Log.Warning(e.Message);
-        return StatusCode(500, e);
+        return NotFound(e);
       }
     }
 

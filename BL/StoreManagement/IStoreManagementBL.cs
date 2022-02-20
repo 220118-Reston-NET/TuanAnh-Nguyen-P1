@@ -6,6 +6,7 @@ namespace BL.Interfaces
   {
     /*
       STORE MANAGEMENT
+      StoreFrontProfile AddNewStoreFrontProfile(StoreFrontProfile p_store);
       StoreFrontProfile GetStoreProfileByID(string p_storeID);
       StoreFrontProfile UpdateStoreProfile(StoreFrontProfile p_store);
       List<StoreFrontProfile> GetAllStoresProfile();
@@ -13,11 +14,18 @@ namespace BL.Interfaces
     */
 
     /// <summary>
+    /// Add new store front profile
+    /// </summary>
+    /// <param name="p_store"></param>
+    /// <returns></returns>
+    StoreFrontProfile AddNewStoreFrontProfile(StoreFrontProfile p_store);
+
+    /// <summary>
     /// Get Store Profile by store ID
     /// </summary>
     /// <param name="p_storeID"></param>
     /// <returns></returns>
-    StoreFrontProfile GetStoreProfileByID(string p_storeID);
+    StoreFrontProfile GetStoreProfileByID(Guid p_storeID);
 
     /// <summary>
     /// Update Store Profile
