@@ -45,7 +45,7 @@ namespace APIPortal.Controllers
 
     // GET: api/Store/5
     [HttpGet(RouteConfigs.StoreProfile)]
-    public IActionResult GetStoreProfileByStoreID(Guid p_storeID)
+    public IActionResult GetStoreProfileByStoreID([FromQuery] Guid p_storeID)
     {
       try
       {
@@ -99,7 +99,7 @@ namespace APIPortal.Controllers
     */
     // GET: api/Inventories
     [HttpGet(RouteConfigs.Inventories)]
-    public IActionResult GetAllStoreInventories(Guid p_storeID)
+    public IActionResult GetAllStoreInventories([FromQuery] Guid p_storeID)
     {
       try
       {
@@ -171,7 +171,7 @@ namespace APIPortal.Controllers
     */
     // GET: api/Orders
     [HttpGet(RouteConfigs.StoreOrders)]
-    public IActionResult GetAllStoreOrders(Guid p_storeID)
+    public IActionResult GetAllStoreOrders([FromQuery] Guid p_storeID)
     {
       try
       {
@@ -188,7 +188,7 @@ namespace APIPortal.Controllers
 
     // GET: api/Orders
     [HttpGet(RouteConfigs.StoreOrdersFilter)]
-    public IActionResult GetAllStoreOrdersWithFilter(Guid p_storeID, string p_filter)
+    public IActionResult GetAllStoreOrdersWithFilter([FromBody] Guid p_storeID, string p_filter)
     {
       try
       {
@@ -205,7 +205,7 @@ namespace APIPortal.Controllers
 
     // GET: api/Order/5
     [HttpGet(RouteConfigs.StoreOrder)]
-    public IActionResult GetStoreOrderByID(Guid p_orderID)
+    public IActionResult GetStoreOrderByID([FromQuery] Guid p_orderID)
     {
       try
       {
@@ -222,7 +222,7 @@ namespace APIPortal.Controllers
 
     // PUT: api/Order/5
     [HttpPut(RouteConfigs.AcceptOrder)]
-    public IActionResult AcceptOrderByOrderID(Guid p_orderID)
+    public IActionResult AcceptOrderByOrderID([FromQuery] Guid p_orderID)
     {
       try
       {
@@ -240,7 +240,7 @@ namespace APIPortal.Controllers
 
     // PUT: api/Order/5
     [HttpPut(RouteConfigs.RejectOrder)]
-    public IActionResult RejectOrderByOrderID(Guid p_orderID)
+    public IActionResult RejectOrderByOrderID([FromQuery] Guid p_orderID)
     {
       try
       {
@@ -258,7 +258,7 @@ namespace APIPortal.Controllers
 
     // PUT: api/Order/5
     [HttpPut(RouteConfigs.CompleteOrder)]
-    public IActionResult CompleteOrderByOrderID(Guid p_orderID)
+    public IActionResult CompleteOrderByOrderID([FromQuery] Guid p_orderID)
     {
       try
       {
@@ -276,7 +276,7 @@ namespace APIPortal.Controllers
 
     // GET: api/Trackings
     [HttpGet(RouteConfigs.Trackings)]
-    public IActionResult GetAllTrackingsByOrderID(Guid p_orderID)
+    public IActionResult GetAllTrackingsByOrderID([FromQuery] Guid p_orderID)
     {
       try
       {
@@ -293,7 +293,7 @@ namespace APIPortal.Controllers
 
     // GET: api/Tracking/5
     [HttpGet(RouteConfigs.Tracking)]
-    public IActionResult GetTrackingDetailByID(Guid p_trackingID)
+    public IActionResult GetTrackingDetailByID([FromQuery] Guid p_trackingID)
     {
       try
       {
@@ -316,6 +316,24 @@ namespace APIPortal.Controllers
       {
         Log.Information("Route: " + RouteConfigs.Tracking);
         _orderBL.UpdateTracking(p_tracking);
+        return Ok();
+      }
+      catch (Exception e)
+      {
+        Log.Warning("Route: " + RouteConfigs.Tracking);
+        Log.Warning(e.Message);
+        return StatusCode(406, e);
+      }
+    }
+
+    // POST: api/Tracking
+    [HttpPost(RouteConfigs.Tracking)]
+    public IActionResult AddTrackingNumber([FromBody] Tracking p_tracking)
+    {
+      try
+      {
+        Log.Information("Route: " + RouteConfigs.Tracking);
+        _orderBL.AddTrackingToOrder(p_tracking.OrderID, p_tracking);
         return Ok();
       }
       catch (Exception e)

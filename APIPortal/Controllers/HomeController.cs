@@ -22,7 +22,7 @@ namespace APIPortal.Controllers
     }
     // GET: api/SearchProducts
     [HttpGet(RouteConfigs.SearchProduct)]
-    public IActionResult SearchProductByName(string p_prodName)
+    public IActionResult SearchProductByName([FromQuery] string p_prodName)
     {
       try
       {
@@ -39,7 +39,7 @@ namespace APIPortal.Controllers
 
     // GET: api/SearchStores
     [HttpGet(RouteConfigs.SearchStore)]
-    public IActionResult SearchStoreByName(string p_storeName)
+    public IActionResult SearchStoreByName([FromQuery] string p_storeName)
     {
       try
       {

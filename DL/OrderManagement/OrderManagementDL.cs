@@ -32,7 +32,7 @@ namespace DL.Implements
 
     public List<LineItem> AddLineItemsToOrder(Order p_order)
     {
-      string _sqlQuery = @"INSERT INTO P1Database.dbo.LineItems
+      string _sqlQuery = @"INSERT INTO LineItems
                           (productID, orderID, quantity, priceAtCheckedOut)
                           VALUES(@productID, @orderID, @quantity, @priceAtCheckedOut);";
 
@@ -206,6 +206,7 @@ namespace DL.Implements
           _listOfTracking.Add(new Tracking()
           {
             TrackingID = reader.GetGuid(0),
+            OrderID = p_orderID,
             TrackingNumber = reader.GetString(1)
           });
         }

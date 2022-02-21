@@ -18,7 +18,15 @@ namespace BL.Implements
 
     public Tracking AddTrackingToOrder(Guid p_orderID, Tracking p_tracking)
     {
-      return _repo.AddTrackingToOrder(p_orderID, p_tracking);
+      if (GetAllTrackingByOrderID(p_orderID).All(p => p.TrackingNumber != p_tracking.TrackingNumber))
+      {
+        return _repo.AddTrackingToOrder(p_orderID, p_tracking);
+      }
+      else
+      {
+        throw new Exception("Cannot add this tracking number due to this tracking number is already added to this order!");
+      }
+
     }
 
     public void CancelOrderByOrderID(Guid p_orderID)

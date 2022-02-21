@@ -39,7 +39,7 @@ namespace APIPortal.Controllers
 
     // GET: api/Product/5
     [HttpGet(RouteConfigs.Product)]
-    public IActionResult GetProductByID(Guid id)
+    public IActionResult GetProductByID([FromQuery] Guid id)
     {
       try
       {

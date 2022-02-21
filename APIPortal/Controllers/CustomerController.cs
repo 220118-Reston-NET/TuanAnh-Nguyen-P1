@@ -44,7 +44,7 @@ namespace APIPortal.Controllers
 
     // GET: api/Customer/5
     [HttpGet(RouteConfigs.CustomerProfile)]
-    public IActionResult GetCustomerByID(Guid p_cusID)
+    public IActionResult GetCustomerByID([FromQuery] Guid p_cusID)
     {
       try
       {
@@ -132,7 +132,7 @@ namespace APIPortal.Controllers
 
     // GET: api/Orders
     [HttpGet(RouteConfigs.CustomerOrders)]
-    public IActionResult GetAllCustomerOrders(Guid p_cusID)
+    public IActionResult GetAllCustomerOrders([FromQuery] Guid p_cusID)
     {
       try
       {
@@ -166,7 +166,7 @@ namespace APIPortal.Controllers
 
     // GET: api/Order/5
     [HttpGet(RouteConfigs.CustomerOrder)]
-    public IActionResult GetCustomerOrderByOrderID(Guid p_orderID)
+    public IActionResult GetCustomerOrderByOrderID([FromQuery] Guid p_orderID)
     {
       try
       {

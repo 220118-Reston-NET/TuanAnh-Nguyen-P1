@@ -64,7 +64,7 @@ namespace DL.Implements
     public void ReplenishInventoryByID(Inventory p_inven)
     {
       string _sqlQuery = @"UPDATE Inventory
-                          SET quantity=@quantity
+                          SET quantity= quantity + @quantity
                           WHERE storeID=@storeID AND productID=@productID;";
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
