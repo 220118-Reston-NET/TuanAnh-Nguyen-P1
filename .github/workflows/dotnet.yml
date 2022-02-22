@@ -17,7 +17,7 @@ jobs:
   # This is where we state a bunch of configuration
   build:
 
-    runs-on: ubuntu-latest  # We are stating that the github server/computer will run on the Linux OS
+    runs-on: windows-latest  # We are stating that the github server/computer will run on the Linux OS
     environment:
       name: 'Production'
     defaults:
