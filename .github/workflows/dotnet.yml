@@ -18,6 +18,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest  # We are stating that the github server/computer will run on the Linux OS
+    environment:
+      name: 'Production'
     defaults:
       run:
         working-directory: ./ # This might differ depending on where your project/app is in your remote repo
