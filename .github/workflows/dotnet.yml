@@ -83,7 +83,7 @@ jobs:
       shell: powershell
       run: |
         .\.sonar\scanner\dotnet-sonarscanner begin /k:"220118-Reston-NET_TuanAnh-Nguyen-P1" /o:"220118-reston-net" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.exclusion="**APIPortal/wwwroot/lib/**" /d:sonar.cs.opencover.reportsPath="**/TestResults/**coverage.opencover.xml" -d:sonar.vstest.reportsPath="**/TestResult/*trx"
-        dotnet build ./PokeApi -c Release
+        dotnet build ./APIPortal -c Release
         .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
     
     # We are creating our publish folder for us to use
