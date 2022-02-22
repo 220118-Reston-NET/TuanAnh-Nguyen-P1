@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{7658421D-F029-4361-9686-2E07041AEB72}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{3625CCBA-CA04-42ED-B72D-6435415F78E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BL", "BL\BL.csproj", "{FE1DE4BB-3BD4-4796-841C-B57001888C3E}"
@@ -24,10 +22,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7658421D-F029-4361-9686-2E07041AEB72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7658421D-F029-4361-9686-2E07041AEB72}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7658421D-F029-4361-9686-2E07041AEB72}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7658421D-F029-4361-9686-2E07041AEB72}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3625CCBA-CA04-42ED-B72D-6435415F78E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3625CCBA-CA04-42ED-B72D-6435415F78E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3625CCBA-CA04-42ED-B72D-6435415F78E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
