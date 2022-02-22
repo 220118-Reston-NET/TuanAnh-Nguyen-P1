@@ -56,4 +56,4 @@ jobs:
         app-name: P1Revature
         slot-name: 'Production'
         publish-profile: $${{secrets.AZURE_WEBAPP_PUBLISH_PROFILE}}
-        package: ./
+        package: ./publish
