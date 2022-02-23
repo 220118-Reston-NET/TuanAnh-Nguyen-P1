@@ -215,6 +215,34 @@ namespace DL.Implements
       return _listOfTracking;
     }
 
+    public List<Tracking> GetAllTrackings()
+    {
+      string _sqlQuery = @"SELECT trackingID, orderID, trackingNumber
+                          FROM Tracking;";
+      List<Tracking> _listOfTracking = new List<Tracking>();
+
+      using (SqlConnection conn = new SqlConnection(_connectionString))
+      {
+        conn.Open();
+
+        SqlCommand command = new SqlCommand(_sqlQuery, conn);
+
+        SqlDataReader reader = command.ExecuteReader();
+
+        while (reader.Read())
+        {
+          _listOfTracking.Add(new Tracking()
+          {
+            TrackingID = reader.GetGuid(0),
+            OrderID = reader.GetGuid(1),
+            TrackingNumber = reader.GetString(2)
+          });
+        }
+      }
+
+      return _listOfTracking;
+    }
+
     public List<LineItem> GetLineItemsByOrderID(Guid p_orderID)
     {
       string _sqlQuery = @"SELECT productID, quantity, priceAtCheckedOut

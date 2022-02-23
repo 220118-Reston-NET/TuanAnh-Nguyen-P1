@@ -6,7 +6,7 @@ namespace BL.Implements
 {
   public class StoreManagementBL : IStoreManagementBL
   {
-    private IStoreManagementDL _repo;
+    private readonly IStoreManagementDL _repo;
     public StoreManagementBL(IStoreManagementDL p_repo)
     {
       _repo = p_repo;

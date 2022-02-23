@@ -7,15 +7,17 @@ using Model;
 using BL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace APIPortal.Controllers
 {
+  [Authorize]
   [Route("api/[controller]")]
   [ApiController]
   public class CustomerController : ControllerBase
   {
-    private ICustomerManagementBL _cusBL;
-    private IOrderManagementBL _orderBL;
+    private readonly ICustomerManagementBL _cusBL;
+    private readonly IOrderManagementBL _orderBL;
     public CustomerController(ICustomerManagementBL p_cusBL, IOrderManagementBL p_orderBL)
     {
       _cusBL = p_cusBL;
@@ -26,6 +28,7 @@ namespace APIPortal.Controllers
       CUSTOMER PROFILE
     */
     // GET: api/Customers
+    [Authorize(Roles = "Customer")]
     [HttpGet(RouteConfigs.Customers)]
     public IActionResult GetAllCustomers()
     {
@@ -43,6 +46,7 @@ namespace APIPortal.Controllers
     }
 
     // GET: api/Customer/5
+    [Authorize(Roles = "Customer")]
     [HttpGet(RouteConfigs.CustomerProfile)]
     public IActionResult GetCustomerByID([FromQuery] Guid p_cusID)
     {
@@ -60,6 +64,7 @@ namespace APIPortal.Controllers
     }
 
     // PUT: api/Customer
+    [Authorize(Roles = "Customer")]
     [HttpPut(RouteConfigs.CustomerProfile)]
     public IActionResult UpdateProfile([FromBody] CustomerProfile p_cus)
     {
@@ -77,6 +82,7 @@ namespace APIPortal.Controllers
     }
 
     // POST: api/Customer
+    [Authorize(Roles = "Customer")]
     [HttpPost(RouteConfigs.CustomerProfile)]
     public IActionResult AddProfile([FromBody] CustomerProfile p_cus)
     {
@@ -97,6 +103,7 @@ namespace APIPortal.Controllers
       CUSTOMER ORDER MANAGEMENT
     */
     // POST: api/Order
+    [Authorize(Roles = "Customer")]
     [HttpPost(RouteConfigs.CustomerOrder)]
     public IActionResult CreateOrder([FromBody] Order p_order)
     {
@@ -114,6 +121,7 @@ namespace APIPortal.Controllers
     }
 
     // PUT: api/Order
+    [Authorize(Roles = "Customer")]
     [HttpPut(RouteConfigs.CustomerOrder)]
     public IActionResult UpdateOrder([FromBody] Order p_order)
     {
@@ -131,6 +139,7 @@ namespace APIPortal.Controllers
     }
 
     // GET: api/Orders
+    [Authorize(Roles = "Customer")]
     [HttpGet(RouteConfigs.CustomerOrders)]
     public IActionResult GetAllCustomerOrders([FromQuery] Guid p_cusID)
     {
@@ -148,6 +157,7 @@ namespace APIPortal.Controllers
     }
 
     // GET: api/Orders
+    [Authorize(Roles = "Customer")]
     [HttpGet(RouteConfigs.CustomerOrdersFilter)]
     public IActionResult GetAllCustomerOrdersWithFilter(Guid p_cusID, string p_filter)
     {
@@ -165,6 +175,7 @@ namespace APIPortal.Controllers
     }
 
     // GET: api/Order/5
+    [Authorize(Roles = "Customer")]
     [HttpGet(RouteConfigs.CustomerOrder)]
     public IActionResult GetCustomerOrderByOrderID([FromQuery] Guid p_orderID)
     {
@@ -180,12 +191,5 @@ namespace APIPortal.Controllers
         return NotFound(e);
       }
     }
-
-
-    // // DELETE: api/Customer/5
-    // [HttpDelete("{id}")]
-    // public void Delete(int id)
-    // {
-    // }
   }
 }

@@ -6,7 +6,7 @@ namespace BL.Implements
 {
   public class OrderManagementBL : IOrderManagementBL
   {
-    private IOrderManagementDL _repo;
+    private readonly IOrderManagementDL _repo;
     public OrderManagementBL(IOrderManagementDL p_repo)
     {
       _repo = p_repo;
@@ -88,7 +88,7 @@ namespace BL.Implements
 
     public Tracking GetTrackingNumberByID(Guid p_trackingID)
     {
-      return GetTrackingNumberByID(p_trackingID);
+      return _repo.GetAllTrackings().Find(p => p.TrackingID.Equals(p_trackingID));
     }
 
     public void RejectOrderByOrderID(Guid p_orderID)

@@ -4,19 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using APIPortal.Consts;
 using BL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 
 namespace APIPortal.Controllers
 {
+  [Authorize]
   [Route("api/[controller]")]
   [ApiController]
   public class StoreController : ControllerBase
   {
-    private IStoreManagementBL _storeBL;
-    private IInventoryManagementBL _invenBL;
-    private IOrderManagementBL _orderBL;
+    private readonly IStoreManagementBL _storeBL;
+    private readonly IInventoryManagementBL _invenBL;
+    private readonly IOrderManagementBL _orderBL;
     public StoreController(IStoreManagementBL p_storeBL, IInventoryManagementBL p_invenBL, IOrderManagementBL p_orderBL)
     {
       _storeBL = p_storeBL;
@@ -27,6 +29,7 @@ namespace APIPortal.Controllers
         STORE MANAGEMENT
     */
     // GET: api/Stores
+    [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.Stores)]
     public IActionResult GetAllStores()
     {
@@ -44,6 +47,7 @@ namespace APIPortal.Controllers
     }
 
     // GET: api/Store/5
+    [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.StoreProfile)]
     public IActionResult GetStoreProfileByStoreID([FromQuery] Guid p_storeID)
     {
@@ -61,6 +65,7 @@ namespace APIPortal.Controllers
     }
 
     // PUT: api/Store
+    [Authorize(Roles = "StoreManager")]
     [HttpPut(RouteConfigs.StoreProfile)]
     public IActionResult UpdateStoreProfile([FromBody] StoreFrontProfile p_store)
     {
@@ -78,6 +83,7 @@ namespace APIPortal.Controllers
     }
 
     // POST: api/Store
+    [Authorize(Roles = "StoreManager")]
     [HttpPost(RouteConfigs.StoreProfile)]
     public IActionResult AddNewStoreProfile([FromBody] StoreFrontProfile p_store)
     {
@@ -98,6 +104,7 @@ namespace APIPortal.Controllers
         STORE INVENTORY MANAGEMENT
     */
     // GET: api/Inventories
+    [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.Inventories)]
     public IActionResult GetAllStoreInventories([FromQuery] Guid p_storeID)
     {
@@ -115,6 +122,7 @@ namespace APIPortal.Controllers
     }
 
     // GET: api/Inventory/5
+    [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.Inventory)]
     public IActionResult GetInventoryByID([FromBody] Inventory p_inven)
     {
@@ -132,6 +140,7 @@ namespace APIPortal.Controllers
     }
 
     // PUT: api/Inventory/5
+    [Authorize(Roles = "StoreManager")]
     [HttpPut(RouteConfigs.Inventory)]
     public IActionResult ReplenishInventoryByID([FromBody] Inventory p_inven)
     {
@@ -150,6 +159,7 @@ namespace APIPortal.Controllers
     }
 
     // POST: api/Inventory
+    [Authorize(Roles = "StoreManager")]
     [HttpPost(RouteConfigs.Inventory)]
     public IActionResult ImportProduct([FromBody] Inventory p_inven)
     {
@@ -170,6 +180,7 @@ namespace APIPortal.Controllers
         STORE ORDERS MANAGEMENT
     */
     // GET: api/Orders
+    [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.StoreOrders)]
     public IActionResult GetAllStoreOrders([FromQuery] Guid p_storeID)
     {
@@ -187,6 +198,7 @@ namespace APIPortal.Controllers
     }
 
     // GET: api/Orders
+    [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.StoreOrdersFilter)]
     public IActionResult GetAllStoreOrdersWithFilter([FromBody] Guid p_storeID, string p_filter)
     {
@@ -204,6 +216,7 @@ namespace APIPortal.Controllers
     }
 
     // GET: api/Order/5
+    [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.StoreOrder)]
     public IActionResult GetStoreOrderByID([FromQuery] Guid p_orderID)
     {
@@ -221,6 +234,7 @@ namespace APIPortal.Controllers
     }
 
     // PUT: api/Order/5
+    [Authorize(Roles = "StoreManager")]
     [HttpPut(RouteConfigs.AcceptOrder)]
     public IActionResult AcceptOrderByOrderID([FromQuery] Guid p_orderID)
     {
@@ -239,6 +253,7 @@ namespace APIPortal.Controllers
     }
 
     // PUT: api/Order/5
+    [Authorize(Roles = "StoreManager")]
     [HttpPut(RouteConfigs.RejectOrder)]
     public IActionResult RejectOrderByOrderID([FromQuery] Guid p_orderID)
     {
@@ -257,6 +272,7 @@ namespace APIPortal.Controllers
     }
 
     // PUT: api/Order/5
+    [Authorize(Roles = "StoreManager")]
     [HttpPut(RouteConfigs.CompleteOrder)]
     public IActionResult CompleteOrderByOrderID([FromQuery] Guid p_orderID)
     {
@@ -275,6 +291,7 @@ namespace APIPortal.Controllers
     }
 
     // GET: api/Trackings
+    [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.Trackings)]
     public IActionResult GetAllTrackingsByOrderID([FromQuery] Guid p_orderID)
     {
@@ -292,6 +309,7 @@ namespace APIPortal.Controllers
     }
 
     // GET: api/Tracking/5
+    [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.Tracking)]
     public IActionResult GetTrackingDetailByID([FromQuery] Guid p_trackingID)
     {
@@ -309,6 +327,7 @@ namespace APIPortal.Controllers
     }
 
     // PUT: api/Tracking
+    [Authorize(Roles = "StoreManager")]
     [HttpPut(RouteConfigs.Tracking)]
     public IActionResult UpdateTrackingNumber([FromBody] Tracking p_tracking)
     {
@@ -327,6 +346,7 @@ namespace APIPortal.Controllers
     }
 
     // POST: api/Tracking
+    [Authorize(Roles = "StoreManager")]
     [HttpPost(RouteConfigs.Tracking)]
     public IActionResult AddTrackingNumber([FromBody] Tracking p_tracking)
     {
@@ -343,11 +363,5 @@ namespace APIPortal.Controllers
         return StatusCode(406, e);
       }
     }
-
-    // // DELETE: api/Store/5
-    // [HttpDelete("{id}")]
-    // public void Delete(int id)
-    // {
-    // }
   }
 }

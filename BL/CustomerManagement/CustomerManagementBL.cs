@@ -6,7 +6,7 @@ namespace BL.Implements
 {
   public class CustomerManagementBL : ICustomerManagementBL
   {
-    private ICustomerManagementDL _repo;
+    private readonly ICustomerManagementDL _repo;
     public CustomerManagementBL(ICustomerManagementDL p_repo)
     {
       _repo = p_repo;

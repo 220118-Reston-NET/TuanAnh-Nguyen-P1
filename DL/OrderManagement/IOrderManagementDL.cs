@@ -16,6 +16,7 @@ namespace DL.Interfaces
     Tracking AddTrackingToOrder(Guid p_orderID, Tracking p_tracking);
     void UpdateTracking(Tracking p_tracking);
     List<Tracking> GetAllTrackingByOrderID(Guid p_orderID);
+    List<Tracking> GetAllTrackings();
     List<Order> GetAllOrders();
   }
 }

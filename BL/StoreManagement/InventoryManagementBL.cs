@@ -6,7 +6,7 @@ namespace BL.Implements
 {
   public class InventoryManagementBL : IInventoryManagementBL
   {
-    private IInventoryManagementDL _repo;
+    private readonly IInventoryManagementDL _repo;
     public InventoryManagementBL(IInventoryManagementDL p_repo)
     {
       _repo = p_repo;

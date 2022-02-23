@@ -6,7 +6,7 @@ namespace BL.Implements
 {
   public class AdminServiceBL : IAdminServiceBL
   {
-    private IAdminServiceDL _repo;
+    private readonly IAdminServiceDL _repo;
     public AdminServiceBL(IAdminServiceDL p_repo)
     {
       _repo = p_repo;

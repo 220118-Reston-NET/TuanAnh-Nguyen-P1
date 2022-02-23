@@ -5,8 +5,6 @@ namespace APIPortal.Consts
     //AUTHENTICATION
     public const string Register = "Register";
     public const string Login = "Login";
-    public const string VerifyUser = "VerifyUser";
-    public const string Logout = "Logout";
 
     //ADMIN
     public const string Product = "Product";

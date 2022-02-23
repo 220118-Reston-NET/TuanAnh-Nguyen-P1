@@ -72,14 +72,3 @@ CREATE TABLE Tracking(
 	PRIMARY KEY (trackingID),
 	FOREIGN KEY (orderID) REFERENCES Orders(orderID)
 )
-
--- User -------
-CREATE TABLE Users(
-    userID UNIQUEIDENTIFIER,
-    userName varchar(50),
-    passwordHash varchar(MAX),
-    passwordSalt varchar(MAX),
-    userRole int,
-    isActivated bit,
-    createdAt smalldatetime
-)

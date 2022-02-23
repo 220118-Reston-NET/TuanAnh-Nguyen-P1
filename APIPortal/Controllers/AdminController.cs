@@ -7,20 +7,23 @@ using APIPortal.Consts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace APIPortal.Controllers
 {
+  [Authorize]
   [Route("api/[controller]")]
   [ApiController]
   public class AdminController : ControllerBase
   {
-    private IAdminServiceBL _adminBL;
+    private readonly IAdminServiceBL _adminBL;
     public AdminController(IAdminServiceBL p_adminBL)
     {
       _adminBL = p_adminBL;
     }
 
     // GET: api/Products
+    [Authorize(Roles = "Admin")]
     [HttpGet(RouteConfigs.Products)]
     public IActionResult GetProducts()
     {
@@ -38,6 +41,7 @@ namespace APIPortal.Controllers
     }
 
     // GET: api/Product/5
+    [Authorize(Roles = "Admin")]
     [HttpGet(RouteConfigs.Product)]
     public IActionResult GetProductByID([FromQuery] Guid id)
     {
@@ -55,6 +59,7 @@ namespace APIPortal.Controllers
     }
 
     // POST: api/Product
+    [Authorize(Roles = "Admin")]
     [HttpPost(RouteConfigs.Product)]
     public IActionResult AddProduct([FromBody] Product p_prod)
     {
@@ -72,6 +77,7 @@ namespace APIPortal.Controllers
     }
 
     // PUT: api/Product
+    [Authorize(Roles = "Admin")]
     [HttpPut(RouteConfigs.Product)]
     public IActionResult UpdateProduct([FromBody] Product p_prod)
     {
@@ -87,11 +93,5 @@ namespace APIPortal.Controllers
         return StatusCode(406, e);
       }
     }
-
-    // // DELETE: api/Admin/5
-    // [HttpDelete("{id}")]
-    // public void Delete(int id)
-    // {
-    // }
   }
 }
