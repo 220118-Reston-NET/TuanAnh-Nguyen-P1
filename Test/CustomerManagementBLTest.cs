@@ -6,13 +6,14 @@ using BL.Implements;
 using Model;
 using Moq;
 using Xunit;
+using System.Threading.Tasks;
 
 namespace Test
 {
   public class CustomerManagementBLTest
   {
     [Fact]
-    public void Should_Get_All_Customers()
+    public async Task Should_Get_All_Customers()
     {
       List<CustomerProfile> _expectedListOfCustomers = new List<CustomerProfile>();
       _expectedListOfCustomers.Add(new CustomerProfile()
@@ -27,11 +28,11 @@ namespace Test
       });
 
       Mock<ICustomerManagementDL> _mockRepo = new Mock<ICustomerManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllCustomerProfile()).Returns(_expectedListOfCustomers);
+      _mockRepo.Setup(repo => repo.GetAllCustomerProfile()).ReturnsAsync(_expectedListOfCustomers);
       ICustomerManagementBL _cusBL = new CustomerManagementBL(_mockRepo.Object);
 
       // Act
-      List<CustomerProfile> _actualListOfCustomer = _cusBL.GetAllCustomerProfile();
+      List<CustomerProfile> _actualListOfCustomer = await _cusBL.GetAllCustomerProfile();
 
       // Assert
       Assert.Same(_expectedListOfCustomers, _actualListOfCustomer);
@@ -40,7 +41,7 @@ namespace Test
     }
 
     [Fact]
-    public void Should_Get_Customer_Information_Matched_Id()
+    public async Task Should_Get_Customer_Information_Matched_Id()
     {
       // Arrange
       List<CustomerProfile> _listOfCustomers = new List<CustomerProfile>();
@@ -68,14 +69,14 @@ namespace Test
       _listOfCustomers.Add(_cus2);
 
       Mock<ICustomerManagementDL> _mockRepo = new Mock<ICustomerManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllCustomerProfile()).Returns(_listOfCustomers);
+      _mockRepo.Setup(repo => repo.GetAllCustomerProfile()).ReturnsAsync(_listOfCustomers);
       ICustomerManagementBL _cusBL = new CustomerManagementBL(_mockRepo.Object);
 
       CustomerProfile _expectedCustomer = _cus2;
 
       CustomerProfile _actualCustomer = new CustomerProfile();
       // Act
-      _actualCustomer = _cusBL.GetProfileByID(_cus2.CustomerID);
+      _actualCustomer = await _cusBL.GetProfileByID(_cus2.CustomerID);
 
       // Assert
       Assert.Same(_expectedCustomer, _actualCustomer);
@@ -86,7 +87,7 @@ namespace Test
     }
 
     [Fact]
-    public void Should_Not_Update_The_Customer()
+    public async Task Should_Not_Update_The_Customer()
     {
       // Arrange
       List<CustomerProfile> _expectedListOfCustomers = new List<CustomerProfile>();
@@ -112,14 +113,14 @@ namespace Test
       });
 
       Mock<ICustomerManagementDL> _mockRepo = new Mock<ICustomerManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllCustomerProfile()).Returns(_expectedListOfCustomers);
+      _mockRepo.Setup(repo => repo.GetAllCustomerProfile()).ReturnsAsync(_expectedListOfCustomers);
       ICustomerManagementBL _cusBL = new CustomerManagementBL(_mockRepo.Object);
 
       CustomerProfile _cus = new CustomerProfile();
       // Act & Assert
       // Change the name of the customer from Tester to Tester2 which is existing in the database
-      Assert.Throws<System.Exception>(
-        () => _cus = _cusBL.UpdateProfile(new CustomerProfile()
+      await Assert.ThrowsAsync<System.Exception>(
+        async () => _cus = await _cusBL.UpdateProfile(new CustomerProfile()
         {
           CustomerID = Guid.NewGuid(),
           FirstName = "Tester2",
@@ -133,7 +134,7 @@ namespace Test
     }
 
     [Fact]
-    public void Should_Not_Add_New_Customer()
+    public async Task Should_Not_Add_New_Customer()
     {
       // Arrange
       List<CustomerProfile> _expectedListOfCustomers = new List<CustomerProfile>();
@@ -149,14 +150,14 @@ namespace Test
       });
 
       Mock<ICustomerManagementDL> _mockRepo = new Mock<ICustomerManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllCustomerProfile()).Returns(_expectedListOfCustomers);
+      _mockRepo.Setup(repo => repo.GetAllCustomerProfile()).ReturnsAsync(_expectedListOfCustomers);
       ICustomerManagementBL _cusBL = new CustomerManagementBL(_mockRepo.Object);
 
       CustomerProfile _newCus = new CustomerProfile();
       // Act & Assert
       // Shouldn't add new customer due to the name is existing in the database
-      Assert.Throws<System.Exception>(
-        () => _newCus = _cusBL.AddNewCustomerProfile(new CustomerProfile()
+      await Assert.ThrowsAsync<System.Exception>(
+        async () => _newCus = await _cusBL.AddNewCustomerProfile(new CustomerProfile()
         {
           CustomerID = Guid.NewGuid(),
           FirstName = "Tester",

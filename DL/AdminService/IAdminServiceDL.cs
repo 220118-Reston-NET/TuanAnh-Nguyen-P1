@@ -4,8 +4,8 @@ namespace DL.Interfaces
 {
   public interface IAdminServiceDL
   {
-    Product AddNewProduct(Product p_prod);
-    List<Product> GetAllProducts();
-    Product UpdateProduct(Product p_prod);
+    Task<Product> AddNewProduct(Product p_prod);
+    Task<List<Product>> GetAllProducts();
+    Task<Product> UpdateProduct(Product p_prod);
   }
 }

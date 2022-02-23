@@ -11,7 +11,7 @@ namespace DL.Implements
     {
       _connectionString = p_connectionString;
     }
-    public void AcceptOrderByOrderID(Guid p_orderID)
+    public async Task AcceptOrderByOrderID(Guid p_orderID)
     {
       string _sqlQuery = @"UPDATE Orders
                           SET orderStatus=@orderStatus
@@ -19,18 +19,18 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
         command.Parameters.AddWithValue("@orderID", p_orderID);
         command.Parameters.AddWithValue("@orderStatus", "Processing");
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
     }
 
-    public List<LineItem> AddLineItemsToOrder(Order p_order)
+    public async Task<List<LineItem>> AddLineItemsToOrder(Order p_order)
     {
       string _sqlQuery = @"INSERT INTO LineItems
                           (productID, orderID, quantity, priceAtCheckedOut)
@@ -38,7 +38,7 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand();
 
@@ -51,14 +51,14 @@ namespace DL.Implements
           command.Parameters.AddWithValue("@quantity", item.Quantity);
           command.Parameters.AddWithValue("@priceAtCheckedOut", item.PriceAtCheckedOut);
 
-          command.ExecuteNonQuery();
+          await command.ExecuteNonQueryAsync();
         }
       }
 
       return p_order.Cart;
     }
 
-    public Tracking AddTrackingToOrder(Guid p_orderID, Tracking p_tracking)
+    public async Task<Tracking> AddTrackingToOrder(Guid p_orderID, Tracking p_tracking)
     {
       string _sqlQuery = @"INSERT INTO Tracking
                           (trackingID, orderID, trackingNumber)
@@ -68,7 +68,7 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
@@ -76,13 +76,13 @@ namespace DL.Implements
         command.Parameters.AddWithValue("@orderID", p_orderID);
         command.Parameters.AddWithValue("@trackingNumber", p_tracking.TrackingNumber);
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
 
       return p_tracking;
     }
 
-    public void CancelOrderByOrderID(Guid p_orderID)
+    public async Task CancelOrderByOrderID(Guid p_orderID)
     {
       string _sqlQuery = @"UPDATE Orders
                           SET orderStatus=@orderStatus
@@ -90,18 +90,18 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
         command.Parameters.AddWithValue("@orderID", p_orderID);
         command.Parameters.AddWithValue("@orderStatus", "Cancelled");
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
     }
 
-    public void CompleteOrderByOrderID(Guid p_orderID)
+    public async Task CompleteOrderByOrderID(Guid p_orderID)
     {
       string _sqlQuery = @"UPDATE Orders
                           SET orderStatus=@orderStatus
@@ -109,18 +109,18 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
         command.Parameters.AddWithValue("@orderID", p_orderID);
         command.Parameters.AddWithValue("@orderStatus", "Shipped");
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
     }
 
-    public Order CreateOrder(Order p_order)
+    public async Task<Order> CreateOrder(Order p_order)
     {
       string _sqlQuery = @"INSERT INTO Orders
                           (orderID, cusID, storeID, totalPrice, orderStatus, createdAt)
@@ -131,7 +131,7 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
@@ -142,16 +142,16 @@ namespace DL.Implements
         command.Parameters.AddWithValue("@orderStatus", "Order Placed");
         command.Parameters.AddWithValue("@createdAt", p_order.createdAt);
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
 
-        AddLineItemsToOrder(p_order);
-        SubstractInventoryAfterPlacedOrder(p_order);
+        await AddLineItemsToOrder(p_order);
+        await SubstractInventoryAfterPlacedOrder(p_order);
       }
 
       return p_order;
     }
 
-    public List<Order> GetAllOrders()
+    public async Task<List<Order>> GetAllOrders()
     {
       string _sqlQuery = @"SELECT orderID, cusID, storeID, totalPrice, orderStatus, createdAt
                           FROM Orders;";
@@ -159,11 +159,11 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
-        SqlDataReader reader = command.ExecuteReader();
+        SqlDataReader reader = await command.ExecuteReaderAsync();
 
         while (reader.Read())
         {
@@ -175,8 +175,8 @@ namespace DL.Implements
             TotalPrice = reader.GetDecimal(3),
             Status = reader.GetString(4),
             createdAt = reader.GetDateTime(5),
-            Cart = GetLineItemsByOrderID(reader.GetGuid(0)),
-            Shipments = GetAllTrackingByOrderID(reader.GetGuid(0))
+            Cart = await GetLineItemsByOrderID(reader.GetGuid(0)),
+            Shipments = await GetAllTrackingByOrderID(reader.GetGuid(0))
           });
         }
       }
@@ -184,7 +184,7 @@ namespace DL.Implements
       return _listOfOrders;
     }
 
-    public List<Tracking> GetAllTrackingByOrderID(Guid p_orderID)
+    public async Task<List<Tracking>> GetAllTrackingByOrderID(Guid p_orderID)
     {
       string _sqlQuery = @"SELECT trackingID, trackingNumber
                             FROM Tracking
@@ -193,13 +193,13 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
         command.Parameters.AddWithValue("@orderID", p_orderID);
 
-        SqlDataReader reader = command.ExecuteReader();
+        SqlDataReader reader = await command.ExecuteReaderAsync();
 
         while (reader.Read())
         {
@@ -215,7 +215,7 @@ namespace DL.Implements
       return _listOfTracking;
     }
 
-    public List<Tracking> GetAllTrackings()
+    public async Task<List<Tracking>> GetAllTrackings()
     {
       string _sqlQuery = @"SELECT trackingID, orderID, trackingNumber
                           FROM Tracking;";
@@ -223,11 +223,11 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
-        SqlDataReader reader = command.ExecuteReader();
+        SqlDataReader reader = await command.ExecuteReaderAsync();
 
         while (reader.Read())
         {
@@ -243,7 +243,7 @@ namespace DL.Implements
       return _listOfTracking;
     }
 
-    public List<LineItem> GetLineItemsByOrderID(Guid p_orderID)
+    public async Task<List<LineItem>> GetLineItemsByOrderID(Guid p_orderID)
     {
       string _sqlQuery = @"SELECT productID, quantity, priceAtCheckedOut
                           FROM LineItems
@@ -252,13 +252,13 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
         command.Parameters.AddWithValue("@orderID", p_orderID);
 
-        SqlDataReader reader = command.ExecuteReader();
+        SqlDataReader reader = await command.ExecuteReaderAsync();
 
         while (reader.Read())
         {
@@ -275,7 +275,7 @@ namespace DL.Implements
       return _cart;
     }
 
-    public void RejectOrderByOrderID(Guid p_orderID)
+    public async Task RejectOrderByOrderID(Guid p_orderID)
     {
       string _sqlQuery = @"UPDATE Orders
                           SET orderStatus=@orderStatus
@@ -283,18 +283,18 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
         command.Parameters.AddWithValue("@orderID", p_orderID);
         command.Parameters.AddWithValue("@orderStatus", "Rejected");
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
     }
 
-    public void SubstractInventoryAfterPlacedOrder(Order p_order)
+    public async Task SubstractInventoryAfterPlacedOrder(Order p_order)
     {
       string _sqlQuery = @"UPDATE Inventory
                           SET quantity=quantity - @quantity
@@ -302,7 +302,7 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand();
 
@@ -314,25 +314,25 @@ namespace DL.Implements
           command.Parameters.AddWithValue("@storeID", p_order.StoreID);
           command.Parameters.AddWithValue("@productID", item.ProductID);
 
-          command.ExecuteNonQuery();
+          await command.ExecuteNonQueryAsync();
         }
       }
     }
 
-    public Order UpdateOrder(Order p_order)
+    public async Task<Order> UpdateOrder(Order p_order)
     {
       string _sqlQuery = @"DELETE FROM LineItems
                           WHERE orderID=@orderID;";
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
         command.Parameters.AddWithValue("@orderID", p_order.OrderID);
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
 
         AddLineItemsToOrder(p_order);
       }
@@ -340,7 +340,7 @@ namespace DL.Implements
       return p_order;
     }
 
-    public void UpdateTracking(Tracking p_tracking)
+    public async Task UpdateTracking(Tracking p_tracking)
     {
       string _sqlQuery = @"UPDATE Tracking
                           SET trackingNumber=@trackingNumber
@@ -348,14 +348,14 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
         command.Parameters.AddWithValue("@trackingNumber", p_tracking.TrackingNumber);
         command.Parameters.AddWithValue("@trackingID", p_tracking.TrackingID);
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
     }
   }

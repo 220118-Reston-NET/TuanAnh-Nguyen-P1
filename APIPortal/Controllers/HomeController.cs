@@ -24,12 +24,12 @@ namespace APIPortal.Controllers
     }
     // GET: api/SearchProducts
     [HttpGet(RouteConfigs.SearchProduct)]
-    public IActionResult SearchProductByName([FromQuery] string p_prodName)
+    public async Task<IActionResult> SearchProductByName([FromQuery] string p_prodName)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.SearchProduct);
-        return Ok(_adminBL.SearchProductByName(p_prodName));
+        return Ok(await _adminBL.SearchProductByName(p_prodName));
       }
       catch (Exception e)
       {
@@ -41,12 +41,12 @@ namespace APIPortal.Controllers
 
     // GET: api/SearchStores
     [HttpGet(RouteConfigs.SearchStore)]
-    public IActionResult SearchStoreByName([FromQuery] string p_storeName)
+    public async Task<IActionResult> SearchStoreByName([FromQuery] string p_storeName)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.SearchStore);
-        return Ok(_storeBL.SearchStoreByName(p_storeName));
+        return Ok(await _storeBL.SearchStoreByName(p_storeName));
       }
       catch (Exception e)
       {

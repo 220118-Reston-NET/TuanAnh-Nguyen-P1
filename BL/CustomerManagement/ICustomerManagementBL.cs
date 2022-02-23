@@ -17,26 +17,26 @@ namespace BL.Interfaces
     /// </summary>
     /// <param name="p_cus"></param>
     /// <returns></returns>
-    CustomerProfile AddNewCustomerProfile(CustomerProfile p_cus);
+    Task<CustomerProfile> AddNewCustomerProfile(CustomerProfile p_cus);
 
     /// <summary>
     /// Get Customer Profile by ID
     /// </summary>
     /// <param name="p_customerID"></param>
     /// <returns></returns>
-    CustomerProfile GetProfileByID(Guid p_customerID);
+    Task<CustomerProfile> GetProfileByID(Guid p_customerID);
 
     /// <summary>
     /// Update the profile 
     /// </summary>
     /// <param name="p_customer"></param>
     /// <returns></returns>
-    CustomerProfile UpdateProfile(CustomerProfile p_customer);
+    Task<CustomerProfile> UpdateProfile(CustomerProfile p_customer);
 
     /// <summary>
     /// Get All Customers in the system
     /// </summary>
     /// <returns></returns>
-    List<CustomerProfile> GetAllCustomerProfile();
+    Task<List<CustomerProfile>> GetAllCustomerProfile();
   }
 }

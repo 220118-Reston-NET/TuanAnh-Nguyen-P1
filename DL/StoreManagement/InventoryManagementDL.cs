@@ -11,7 +11,7 @@ namespace DL.Implements
     {
       _connectionString = p_connectionString;
     }
-    public List<Inventory> GetAllInventory()
+    public async Task<List<Inventory>> GetAllInventory()
     {
       string _sqlQuery = @"SELECT storeID, productID, quantity
                           FROM Inventory;";
@@ -19,11 +19,11 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
-        SqlDataReader reader = command.ExecuteReader();
+        SqlDataReader reader = await command.ExecuteReaderAsync();
 
         while (reader.Read())
         {
@@ -39,7 +39,7 @@ namespace DL.Implements
       return _listInventory;
     }
 
-    public Inventory ImportNewProduct(Inventory p_inven)
+    public async Task<Inventory> ImportNewProduct(Inventory p_inven)
     {
       string _sqlQuery = @"INSERT INTO Inventory
                           (storeID, productID, quantity)
@@ -47,7 +47,7 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
@@ -55,13 +55,13 @@ namespace DL.Implements
         command.Parameters.AddWithValue("@productID", p_inven.ProductID);
         command.Parameters.AddWithValue("@quantity", p_inven.Quantity);
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
 
       return p_inven;
     }
 
-    public void ReplenishInventoryByID(Inventory p_inven)
+    public async Task ReplenishInventoryByID(Inventory p_inven)
     {
       string _sqlQuery = @"UPDATE Inventory
                           SET quantity= quantity + @quantity
@@ -69,7 +69,7 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
@@ -77,7 +77,7 @@ namespace DL.Implements
         command.Parameters.AddWithValue("@storeID", p_inven.StoreID);
         command.Parameters.AddWithValue("@productID", p_inven.ProductID);
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
     }
   }

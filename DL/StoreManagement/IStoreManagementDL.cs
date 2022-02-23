@@ -4,8 +4,8 @@ namespace DL.Interfaces
 {
   public interface IStoreManagementDL
   {
-    StoreFrontProfile AddNewStoreFrontProfile(StoreFrontProfile p_store);
-    StoreFrontProfile UpdateStoreProfile(StoreFrontProfile p_store);
-    List<StoreFrontProfile> GetAllStoresProfile();
+    Task<StoreFrontProfile> AddNewStoreFrontProfile(StoreFrontProfile p_store);
+    Task<StoreFrontProfile> UpdateStoreProfile(StoreFrontProfile p_store);
+    Task<List<StoreFrontProfile>> GetAllStoresProfile();
   }
 }

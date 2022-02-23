@@ -6,13 +6,14 @@ using BL.Implements;
 using Model;
 using Moq;
 using Xunit;
+using System.Threading.Tasks;
 
 namespace Test
 {
   public class StoreManagementBLTest
   {
     [Fact]
-    public void Should_Get_All_StoreFronts()
+    public async Task Should_Get_All_StoreFronts()
     {
       // Arrange
       List<StoreFrontProfile> _expectedListOfStoreFronts = new List<StoreFrontProfile>();
@@ -24,11 +25,11 @@ namespace Test
       });
 
       Mock<IStoreManagementDL> _mockRepo = new Mock<IStoreManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllStoresProfile()).Returns(_expectedListOfStoreFronts);
+      _mockRepo.Setup(repo => repo.GetAllStoresProfile()).ReturnsAsync(_expectedListOfStoreFronts);
       IStoreManagementBL _stofBL = new StoreManagementBL(_mockRepo.Object);
 
       // Act
-      List<StoreFrontProfile> _actualListOfStoreFronts = _stofBL.GetAllStoresProfile();
+      List<StoreFrontProfile> _actualListOfStoreFronts = await _stofBL.GetAllStoresProfile();
 
       // Assert
       Assert.Same(_expectedListOfStoreFronts, _actualListOfStoreFronts);
@@ -36,7 +37,7 @@ namespace Test
     }
 
     [Fact]
-    public void Should_Not_Add_New_StoreFront()
+    public async Task Should_Not_Add_New_StoreFront()
     {
       // Arrange
       List<StoreFrontProfile> _expectedListOfStoreFronts = new List<StoreFrontProfile>();
@@ -48,14 +49,14 @@ namespace Test
       });
 
       Mock<IStoreManagementDL> _mockRepo = new Mock<IStoreManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllStoresProfile()).Returns(_expectedListOfStoreFronts);
+      _mockRepo.Setup(repo => repo.GetAllStoresProfile()).ReturnsAsync(_expectedListOfStoreFronts);
       IStoreManagementBL _stofBL = new StoreManagementBL(_mockRepo.Object);
 
       StoreFrontProfile _newStoreF = new StoreFrontProfile();
 
       // Act & Assert
-      Assert.Throws<System.Exception>(
-        () => _newStoreF = _stofBL.AddNewStoreFrontProfile(new StoreFrontProfile()
+      await Assert.ThrowsAsync<System.Exception>(
+        async () => _newStoreF = await _stofBL.AddNewStoreFrontProfile(new StoreFrontProfile()
         {
           StoreID = Guid.NewGuid(),
           Name = "KiTech",
@@ -65,7 +66,7 @@ namespace Test
     }
 
     [Fact]
-    public void Should_Not_Update_The_StoreFront()
+    public async Task Should_Not_Update_The_StoreFront()
     {
       // Arrange
       List<StoreFrontProfile> _expectedListOfStoreFronts = new List<StoreFrontProfile>();
@@ -85,15 +86,15 @@ namespace Test
       _expectedListOfStoreFronts.Add(_store2);
 
       Mock<IStoreManagementDL> _mockRepo = new Mock<IStoreManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllStoresProfile()).Returns(_expectedListOfStoreFronts);
+      _mockRepo.Setup(repo => repo.GetAllStoresProfile()).ReturnsAsync(_expectedListOfStoreFronts);
       IStoreManagementBL _stofBL = new StoreManagementBL(_mockRepo.Object);
 
       StoreFrontProfile _storeF = new StoreFrontProfile();
 
       // Act & Assert
       // Change the name of the KiTech to KiStore which is also existing in the database
-      Assert.Throws<System.Exception>(
-        () => _storeF = _stofBL.UpdateStoreProfile(new StoreFrontProfile()
+      await Assert.ThrowsAsync<System.Exception>(
+        async () => _storeF = await _stofBL.UpdateStoreProfile(new StoreFrontProfile()
         {
           StoreID = Guid.NewGuid(),
           Name = "KiStore",
@@ -103,7 +104,7 @@ namespace Test
     }
 
     [Fact]
-    public void Should_Get_StoreFront_Information_By_StoreID()
+    public async Task Should_Get_StoreFront_Information_By_StoreID()
     {
       // Arrange
       List<StoreFrontProfile> _listOfStoreFronts = new List<StoreFrontProfile>();
@@ -123,20 +124,20 @@ namespace Test
       _listOfStoreFronts.Add(_store2);
 
       Mock<IStoreManagementDL> _mockRepo = new Mock<IStoreManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllStoresProfile()).Returns(_listOfStoreFronts);
+      _mockRepo.Setup(repo => repo.GetAllStoresProfile()).ReturnsAsync(_listOfStoreFronts);
       IStoreManagementBL _stofBL = new StoreManagementBL(_mockRepo.Object);
 
       StoreFrontProfile _expectedStore = _store2;
 
       // Act
-      StoreFrontProfile _actualStore = _stofBL.GetStoreProfileByID(_store2.StoreID);
+      StoreFrontProfile _actualStore = await _stofBL.GetStoreProfileByID(_store2.StoreID);
 
       // Assert
       Assert.Same(_expectedStore, _actualStore);
     }
 
     [Fact]
-    public void Should_Get_StoreFront_That_Have_Name_Matched()
+    public async Task Should_Get_StoreFront_That_Have_Name_Matched()
     {
       // Arrange
       List<StoreFrontProfile> _expectedStore = new List<StoreFrontProfile>();
@@ -156,11 +157,11 @@ namespace Test
       _expectedStore.Add(_store2);
 
       Mock<IStoreManagementDL> _mockRepo = new Mock<IStoreManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllStoresProfile()).Returns(_expectedStore);
+      _mockRepo.Setup(repo => repo.GetAllStoresProfile()).ReturnsAsync(_expectedStore);
       IStoreManagementBL _stofBL = new StoreManagementBL(_mockRepo.Object);
 
       // Act
-      List<StoreFrontProfile> _actualStore = _stofBL.SearchStoreByName("Ki");
+      List<StoreFrontProfile> _actualStore = await _stofBL.SearchStoreByName("Ki");
 
       // Assert
       Assert.Equal(_expectedStore, _actualStore);

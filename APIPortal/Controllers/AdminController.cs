@@ -31,12 +31,12 @@ namespace APIPortal.Controllers
     // GET: api/Products
     [Authorize(Roles = "Admin")]
     [HttpGet(RouteConfigs.Products)]
-    public IActionResult GetProducts()
+    public async Task<IActionResult> GetProducts()
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Products);
-        return Ok(_adminBL.GetAllProducts());
+        return Ok(await _adminBL.GetAllProducts());
       }
       catch (Exception e)
       {
@@ -49,12 +49,12 @@ namespace APIPortal.Controllers
     // GET: api/Product/5
     [Authorize(Roles = "Admin")]
     [HttpGet(RouteConfigs.Product)]
-    public IActionResult GetProductByID([FromQuery] Guid id)
+    public async Task<IActionResult> GetProductByID([FromQuery] Guid id)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Product);
-        return Ok(_adminBL.GetProductByID(id));
+        return Ok(await _adminBL.GetProductByID(id));
       }
       catch (Exception e)
       {
@@ -67,12 +67,12 @@ namespace APIPortal.Controllers
     // POST: api/Product
     [Authorize(Roles = "Admin")]
     [HttpPost(RouteConfigs.Product)]
-    public IActionResult AddProduct([FromBody] Product p_prod)
+    public async Task<IActionResult> AddProduct([FromBody] Product p_prod)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Product);
-        return Created("Succesfully created a new product!", _adminBL.AddNewProduct(p_prod));
+        return Created("Succesfully created a new product!", await _adminBL.AddNewProduct(p_prod));
       }
       catch (Exception e)
       {
@@ -85,12 +85,12 @@ namespace APIPortal.Controllers
     // PUT: api/Product
     [Authorize(Roles = "Admin")]
     [HttpPut(RouteConfigs.Product)]
-    public IActionResult UpdateProduct([FromBody] Product p_prod)
+    public async Task<IActionResult> UpdateProduct([FromBody] Product p_prod)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Product);
-        return Ok(_adminBL.UpdateProduct(p_prod));
+        return Ok(await _adminBL.UpdateProduct(p_prod));
       }
       catch (Exception e)
       {

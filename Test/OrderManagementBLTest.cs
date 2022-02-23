@@ -6,13 +6,14 @@ using BL.Implements;
 using Model;
 using Moq;
 using Xunit;
+using System.Threading.Tasks;
 
 namespace Test
 {
   public class IOrderManagementBLTest
   {
     [Fact]
-    public void Should_Get_All_Orders()
+    public async Task Should_Get_All_Orders()
     {
       // Arrange
       List<Order> _expectedListOfOrders = new List<Order>();
@@ -29,11 +30,11 @@ namespace Test
       });
 
       Mock<IOrderManagementDL> _mockRepo = new Mock<IOrderManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllOrders()).Returns(_expectedListOfOrders);
+      _mockRepo.Setup(repo => repo.GetAllOrders()).ReturnsAsync(_expectedListOfOrders);
       IOrderManagementBL _orderBL = new OrderManagementBL(_mockRepo.Object);
 
       // Act
-      List<Order> _actualListOfOrders = _orderBL.GetAllOrders();
+      List<Order> _actualListOfOrders = await _orderBL.GetAllOrders();
 
       // Assert
       Assert.Same(_expectedListOfOrders, _actualListOfOrders);
@@ -41,7 +42,7 @@ namespace Test
     }
 
     [Fact]
-    public void Should_Get_All_Orders_By_Customer_ID()
+    public async Task Should_Get_All_Orders_By_Customer_ID()
     {
       // Arrange
       List<Order> _listOfAllOrders = new List<Order>();
@@ -83,7 +84,7 @@ namespace Test
       _listOfAllOrders.Add(_order3);
 
       Mock<IOrderManagementDL> _mockRepo = new Mock<IOrderManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllOrders()).Returns(_listOfAllOrders);
+      _mockRepo.Setup(repo => repo.GetAllOrders()).ReturnsAsync(_listOfAllOrders);
       IOrderManagementBL _orderBL = new OrderManagementBL(_mockRepo.Object);
 
       List<Order> _expectedListOfOrders = new List<Order>();
@@ -92,7 +93,7 @@ namespace Test
 
       List<Order> _actualListOfOrders = new List<Order>();
       // Act
-      _actualListOfOrders = _orderBL.GetAllOrdersByCustomerID(_order1.CustomerID);
+      _actualListOfOrders = await _orderBL.GetAllOrdersByCustomerID(_order1.CustomerID);
 
       // Assert
       Assert.Equal(_expectedListOfOrders.Count, _actualListOfOrders.Count);
@@ -101,7 +102,7 @@ namespace Test
     }
 
     [Fact]
-    public void Should_Get_All_Orders_By_Customer_ID_With_Filter()
+    public async Task Should_Get_All_Orders_By_Customer_ID_With_Filter()
     {
       // Arrange
       List<Order> _listOfAllOrders = new List<Order>();
@@ -143,7 +144,7 @@ namespace Test
       _listOfAllOrders.Add(_order3);
 
       Mock<IOrderManagementDL> _mockRepo = new Mock<IOrderManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllOrders()).Returns(_listOfAllOrders);
+      _mockRepo.Setup(repo => repo.GetAllOrders()).ReturnsAsync(_listOfAllOrders);
       IOrderManagementBL _orderBL = new OrderManagementBL(_mockRepo.Object);
 
       List<Order> _expectedListOfOrders = new List<Order>();
@@ -151,7 +152,7 @@ namespace Test
 
       List<Order> _actualListOfOrders = new List<Order>();
       // Act
-      _actualListOfOrders = _orderBL.GetAllOrdersByCustomerIDWithFilter(_order3.CustomerID, _order3.Status);
+      _actualListOfOrders = await _orderBL.GetAllOrdersByCustomerIDWithFilter(_order3.CustomerID, _order3.Status);
 
       // Assert
       Assert.Equal(_expectedListOfOrders.Count, _actualListOfOrders.Count);
@@ -160,7 +161,7 @@ namespace Test
     }
 
     [Fact]
-    public void Should_Get_All_Orders_By_Store_ID()
+    public async Task Should_Get_All_Orders_By_Store_ID()
     {
       // Arrange
       List<Order> _listOfAllOrders = new List<Order>();
@@ -202,7 +203,7 @@ namespace Test
       _listOfAllOrders.Add(_order3);
 
       Mock<IOrderManagementDL> _mockRepo = new Mock<IOrderManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllOrders()).Returns(_listOfAllOrders);
+      _mockRepo.Setup(repo => repo.GetAllOrders()).ReturnsAsync(_listOfAllOrders);
       IOrderManagementBL _orderBL = new OrderManagementBL(_mockRepo.Object);
 
       List<Order> _expectedListOfOrders = new List<Order>();
@@ -211,7 +212,7 @@ namespace Test
 
       List<Order> _actualListOfOrders = new List<Order>();
       // Act
-      _actualListOfOrders = _orderBL.GetAllOrdersByStoreID(_order1.StoreID);
+      _actualListOfOrders = await _orderBL.GetAllOrdersByStoreID(_order1.StoreID);
 
       // Assert
       Assert.Equal(_expectedListOfOrders.Count, _actualListOfOrders.Count);
@@ -220,7 +221,7 @@ namespace Test
     }
 
     [Fact]
-    public void Should_Get_All_Orders_By_Store_ID_With_Filter()
+    public async Task Should_Get_All_Orders_By_Store_ID_With_Filter()
     {
       // Arrange
       List<Order> _listOfAllOrders = new List<Order>();
@@ -262,7 +263,7 @@ namespace Test
       _listOfAllOrders.Add(_order3);
 
       Mock<IOrderManagementDL> _mockRepo = new Mock<IOrderManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllOrders()).Returns(_listOfAllOrders);
+      _mockRepo.Setup(repo => repo.GetAllOrders()).ReturnsAsync(_listOfAllOrders);
       IOrderManagementBL _orderBL = new OrderManagementBL(_mockRepo.Object);
 
       List<Order> _expectedListOfOrders = new List<Order>();
@@ -270,7 +271,7 @@ namespace Test
 
       List<Order> _actualListOfOrders = new List<Order>();
       // Act
-      _actualListOfOrders = _orderBL.GetAllOrdersByStoreIDWithFilter(_order3.StoreID, _order3.Status);
+      _actualListOfOrders = await _orderBL.GetAllOrdersByStoreIDWithFilter(_order3.StoreID, _order3.Status);
 
       // Assert
       Assert.Equal(_expectedListOfOrders.Count, _actualListOfOrders.Count);
@@ -279,7 +280,7 @@ namespace Test
     }
 
     [Fact]
-    public void Should_Get_Order_Detail_By_OrderID()
+    public async Task Should_Get_Order_Detail_By_OrderID()
     {
       // Arrange
       List<Order> _listOfAllOrders = new List<Order>();
@@ -321,13 +322,13 @@ namespace Test
       _listOfAllOrders.Add(_order3);
 
       Mock<IOrderManagementDL> _mockRepo = new Mock<IOrderManagementDL>();
-      _mockRepo.Setup(repo => repo.GetAllOrders()).Returns(_listOfAllOrders);
+      _mockRepo.Setup(repo => repo.GetAllOrders()).ReturnsAsync(_listOfAllOrders);
       IOrderManagementBL _orderBL = new OrderManagementBL(_mockRepo.Object);
 
       Order _expectedOrder = _order2;
 
       // Act
-      Order _actualOrder = _orderBL.GetOrderByOrderID(_order2.OrderID);
+      Order _actualOrder = await _orderBL.GetOrderByOrderID(_order2.OrderID);
 
       // Assert
       Assert.Same(_expectedOrder, _actualOrder);

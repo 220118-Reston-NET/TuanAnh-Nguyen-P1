@@ -18,33 +18,33 @@ namespace BL.Interfaces
     /// </summary>
     /// <param name="p_prod"></param>
     /// <returns></returns>
-    Product AddNewProduct(Product p_prod);
+    Task<Product> AddNewProduct(Product p_prod);
 
     /// <summary>
     /// Get All Products in the system
     /// </summary>
     /// <returns>All Products</returns>
-    List<Product> GetAllProducts();
+    Task<List<Product>> GetAllProducts();
 
     /// <summary>
     /// Get Product Detail By Product ID
     /// </summary>
     /// <param name="p_prodID"></param>
     /// <returns>Product Detail</returns>
-    Product GetProductByID(Guid p_prodID);
+    Task<Product> GetProductByID(Guid p_prodID);
 
     /// <summary>
     /// Update Product Detail
     /// </summary>
     /// <param name="p_prod"></param>
     /// <returns></returns>
-    Product UpdateProduct(Product p_prod);
+    Task<Product> UpdateProduct(Product p_prod);
 
     /// <summary>
     /// Search Products By Product Name
     /// </summary>
     /// <param name="p_prodName"></param>
     /// <returns></returns>
-    List<Product> SearchProductByName(string p_prodName);
+    Task<List<Product>> SearchProductByName(string p_prodName);
   }
 }

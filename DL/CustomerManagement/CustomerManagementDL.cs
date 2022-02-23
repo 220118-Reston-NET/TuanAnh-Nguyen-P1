@@ -12,7 +12,7 @@ namespace DL.Implements
       _connectionString = p_connectionString;
     }
 
-    public CustomerProfile AddNewCustomerProfile(CustomerProfile p_cus)
+    public async Task<CustomerProfile> AddNewCustomerProfile(CustomerProfile p_cus)
     {
       string _sqlQuery = @"INSERT INTO Customers
                           (cusID, cusFName, cusLName, cusAddress, cusEmail, cusPhoneNo, dateOfBirth)
@@ -20,7 +20,7 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
@@ -32,13 +32,13 @@ namespace DL.Implements
         command.Parameters.AddWithValue("@cusPhoneNo", p_cus.PhoneNumber);
         command.Parameters.AddWithValue("@dateOfBirth", p_cus.DateOfBirth);
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
 
       return p_cus;
     }
 
-    public List<CustomerProfile> GetAllCustomerProfile()
+    public async Task<List<CustomerProfile>> GetAllCustomerProfile()
     {
       string _sqlQuery = @"SELECT cusID, cusFName, cusLName, cusAddress, cusEmail, cusPhoneNo, dateOfBirth
                           FROM Customers;";
@@ -46,11 +46,11 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
-        SqlDataReader reader = command.ExecuteReader();
+        SqlDataReader reader = await command.ExecuteReaderAsync();
 
         while (reader.Read())
         {
@@ -70,7 +70,7 @@ namespace DL.Implements
       return _listOfCustomers;
     }
 
-    public CustomerProfile UpdateProfile(CustomerProfile p_customer)
+    public async Task<CustomerProfile> UpdateProfile(CustomerProfile p_customer)
     {
       string _sqlQuery = @"UPDATE Customers
                           SET cusFName=@cusFName, cusLName=@cusLName, cusAddress=@cusAddress, cusEmail=@cusEmail, cusPhoneNo=@cusPhoneNo, dateOfBirth=@dateOfBirth
@@ -78,7 +78,7 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
@@ -90,7 +90,7 @@ namespace DL.Implements
         command.Parameters.AddWithValue("@dateOfBirth", p_customer.DateOfBirth);
         command.Parameters.AddWithValue("@cusID", p_customer.CustomerID);
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
 
       return p_customer;

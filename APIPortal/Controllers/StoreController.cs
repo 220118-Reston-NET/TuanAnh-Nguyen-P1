@@ -31,12 +31,12 @@ namespace APIPortal.Controllers
     // GET: api/Stores
     [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.Stores)]
-    public IActionResult GetAllStores()
+    public async Task<IActionResult> GetAllStores()
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Stores);
-        return Ok(_storeBL.GetAllStoresProfile());
+        return Ok(await _storeBL.GetAllStoresProfile());
       }
       catch (Exception e)
       {
@@ -49,12 +49,12 @@ namespace APIPortal.Controllers
     // GET: api/Store/5
     [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.StoreProfile)]
-    public IActionResult GetStoreProfileByStoreID([FromQuery] Guid p_storeID)
+    public async Task<IActionResult> GetStoreProfileByStoreID([FromQuery] Guid p_storeID)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.StoreProfile);
-        return Ok(_storeBL.GetStoreProfileByID(p_storeID));
+        return Ok(await _storeBL.GetStoreProfileByID(p_storeID));
       }
       catch (Exception e)
       {
@@ -67,12 +67,12 @@ namespace APIPortal.Controllers
     // PUT: api/Store
     [Authorize(Roles = "StoreManager")]
     [HttpPut(RouteConfigs.StoreProfile)]
-    public IActionResult UpdateStoreProfile([FromBody] StoreFrontProfile p_store)
+    public async Task<IActionResult> UpdateStoreProfile([FromBody] StoreFrontProfile p_store)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.StoreProfile);
-        return Accepted(_storeBL.UpdateStoreProfile(p_store));
+        return Accepted(await _storeBL.UpdateStoreProfile(p_store));
       }
       catch (Exception e)
       {
@@ -85,12 +85,12 @@ namespace APIPortal.Controllers
     // POST: api/Store
     [Authorize(Roles = "StoreManager")]
     [HttpPost(RouteConfigs.StoreProfile)]
-    public IActionResult AddNewStoreProfile([FromBody] StoreFrontProfile p_store)
+    public async Task<IActionResult> AddNewStoreProfile([FromBody] StoreFrontProfile p_store)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.StoreProfile);
-        return Created("Successfully created new store front profile!", _storeBL.AddNewStoreFrontProfile(p_store));
+        return Created("Successfully created new store front profile!", await _storeBL.AddNewStoreFrontProfile(p_store));
       }
       catch (Exception e)
       {
@@ -106,12 +106,12 @@ namespace APIPortal.Controllers
     // GET: api/Inventories
     [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.Inventories)]
-    public IActionResult GetAllStoreInventories([FromQuery] Guid p_storeID)
+    public async Task<IActionResult> GetAllStoreInventories([FromQuery] Guid p_storeID)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Inventories);
-        return Ok(_invenBL.GetStoreInventoryByStoreID(p_storeID));
+        return Ok(await _invenBL.GetStoreInventoryByStoreID(p_storeID));
       }
       catch (Exception e)
       {
@@ -124,12 +124,12 @@ namespace APIPortal.Controllers
     // GET: api/Inventory/5
     [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.Inventory)]
-    public IActionResult GetInventoryByID([FromBody] Inventory p_inven)
+    public async Task<IActionResult> GetInventoryByID([FromBody] Inventory p_inven)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Inventory);
-        return Ok(_invenBL.GetInventory(p_inven));
+        return Ok(await _invenBL.GetInventory(p_inven));
       }
       catch (Exception e)
       {
@@ -142,12 +142,12 @@ namespace APIPortal.Controllers
     // PUT: api/Inventory/5
     [Authorize(Roles = "StoreManager")]
     [HttpPut(RouteConfigs.Inventory)]
-    public IActionResult ReplenishInventoryByID([FromBody] Inventory p_inven)
+    public async Task<IActionResult> ReplenishInventoryByID([FromBody] Inventory p_inven)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Inventory);
-        _invenBL.ReplenishInventoryByID(p_inven);
+        await _invenBL.ReplenishInventoryByID(p_inven);
         return Ok();
       }
       catch (Exception e)
@@ -161,12 +161,12 @@ namespace APIPortal.Controllers
     // POST: api/Inventory
     [Authorize(Roles = "StoreManager")]
     [HttpPost(RouteConfigs.Inventory)]
-    public IActionResult ImportProduct([FromBody] Inventory p_inven)
+    public async Task<IActionResult> ImportProduct([FromBody] Inventory p_inven)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Inventory);
-        return Ok(_invenBL.ImportNewProduct(p_inven));
+        return Ok(await _invenBL.ImportNewProduct(p_inven));
       }
       catch (Exception e)
       {
@@ -182,12 +182,12 @@ namespace APIPortal.Controllers
     // GET: api/Orders
     [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.StoreOrders)]
-    public IActionResult GetAllStoreOrders([FromQuery] Guid p_storeID)
+    public async Task<IActionResult> GetAllStoreOrders([FromQuery] Guid p_storeID)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.StoreOrders);
-        return Ok(_orderBL.GetAllOrdersByStoreID(p_storeID));
+        return Ok(await _orderBL.GetAllOrdersByStoreID(p_storeID));
       }
       catch (Exception e)
       {
@@ -200,12 +200,12 @@ namespace APIPortal.Controllers
     // GET: api/Orders
     [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.StoreOrdersFilter)]
-    public IActionResult GetAllStoreOrdersWithFilter([FromBody] Guid p_storeID, string p_filter)
+    public async Task<IActionResult> GetAllStoreOrdersWithFilter([FromBody] Guid p_storeID, string p_filter)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.StoreOrdersFilter);
-        return Ok(_orderBL.GetAllOrdersByStoreIDWithFilter(p_storeID, p_filter));
+        return Ok(await _orderBL.GetAllOrdersByStoreIDWithFilter(p_storeID, p_filter));
       }
       catch (Exception e)
       {
@@ -218,12 +218,12 @@ namespace APIPortal.Controllers
     // GET: api/Order/5
     [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.StoreOrder)]
-    public IActionResult GetStoreOrderByID([FromQuery] Guid p_orderID)
+    public async Task<IActionResult> GetStoreOrderByID([FromQuery] Guid p_orderID)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.StoreOrder);
-        return Ok(_orderBL.GetOrderByOrderID(p_orderID));
+        return Ok(await _orderBL.GetOrderByOrderID(p_orderID));
       }
       catch (Exception e)
       {
@@ -236,12 +236,12 @@ namespace APIPortal.Controllers
     // PUT: api/Order/5
     [Authorize(Roles = "StoreManager")]
     [HttpPut(RouteConfigs.AcceptOrder)]
-    public IActionResult AcceptOrderByOrderID([FromQuery] Guid p_orderID)
+    public async Task<IActionResult> AcceptOrderByOrderID([FromQuery] Guid p_orderID)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.AcceptOrder);
-        _orderBL.AcceptOrderByOrderID(p_orderID);
+        await _orderBL.AcceptOrderByOrderID(p_orderID);
         return Ok();
       }
       catch (Exception e)
@@ -255,12 +255,12 @@ namespace APIPortal.Controllers
     // PUT: api/Order/5
     [Authorize(Roles = "StoreManager")]
     [HttpPut(RouteConfigs.RejectOrder)]
-    public IActionResult RejectOrderByOrderID([FromQuery] Guid p_orderID)
+    public async Task<IActionResult> RejectOrderByOrderID([FromQuery] Guid p_orderID)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.RejectOrder);
-        _orderBL.RejectOrderByOrderID(p_orderID);
+        await _orderBL.RejectOrderByOrderID(p_orderID);
         return Ok();
       }
       catch (Exception e)
@@ -274,12 +274,12 @@ namespace APIPortal.Controllers
     // PUT: api/Order/5
     [Authorize(Roles = "StoreManager")]
     [HttpPut(RouteConfigs.CompleteOrder)]
-    public IActionResult CompleteOrderByOrderID([FromQuery] Guid p_orderID)
+    public async Task<IActionResult> CompleteOrderByOrderID([FromQuery] Guid p_orderID)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.CompleteOrder);
-        _orderBL.CompleteOrderByOrderID(p_orderID);
+        await _orderBL.CompleteOrderByOrderID(p_orderID);
         return Ok();
       }
       catch (Exception e)
@@ -293,12 +293,12 @@ namespace APIPortal.Controllers
     // GET: api/Trackings
     [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.Trackings)]
-    public IActionResult GetAllTrackingsByOrderID([FromQuery] Guid p_orderID)
+    public async Task<IActionResult> GetAllTrackingsByOrderID([FromQuery] Guid p_orderID)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Trackings);
-        return Ok(_orderBL.GetAllTrackingByOrderID(p_orderID));
+        return Ok(await _orderBL.GetAllTrackingByOrderID(p_orderID));
       }
       catch (Exception e)
       {
@@ -311,12 +311,12 @@ namespace APIPortal.Controllers
     // GET: api/Tracking/5
     [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.Tracking)]
-    public IActionResult GetTrackingDetailByID([FromQuery] Guid p_trackingID)
+    public async Task<IActionResult> GetTrackingDetailByID([FromQuery] Guid p_trackingID)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Tracking);
-        return Ok(_orderBL.GetTrackingNumberByID(p_trackingID));
+        return Ok(await _orderBL.GetTrackingNumberByID(p_trackingID));
       }
       catch (Exception e)
       {
@@ -329,12 +329,12 @@ namespace APIPortal.Controllers
     // PUT: api/Tracking
     [Authorize(Roles = "StoreManager")]
     [HttpPut(RouteConfigs.Tracking)]
-    public IActionResult UpdateTrackingNumber([FromBody] Tracking p_tracking)
+    public async Task<IActionResult> UpdateTrackingNumber([FromBody] Tracking p_tracking)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Tracking);
-        _orderBL.UpdateTracking(p_tracking);
+        await _orderBL.UpdateTracking(p_tracking);
         return Ok();
       }
       catch (Exception e)
@@ -348,12 +348,12 @@ namespace APIPortal.Controllers
     // POST: api/Tracking
     [Authorize(Roles = "StoreManager")]
     [HttpPost(RouteConfigs.Tracking)]
-    public IActionResult AddTrackingNumber([FromBody] Tracking p_tracking)
+    public async Task<IActionResult> AddTrackingNumber([FromBody] Tracking p_tracking)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Tracking);
-        _orderBL.AddTrackingToOrder(p_tracking.OrderID, p_tracking);
+        await _orderBL.AddTrackingToOrder(p_tracking.OrderID, p_tracking);
         return Ok();
       }
       catch (Exception e)

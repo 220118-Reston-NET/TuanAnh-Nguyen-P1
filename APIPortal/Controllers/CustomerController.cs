@@ -30,12 +30,12 @@ namespace APIPortal.Controllers
     // GET: api/Customers
     [Authorize(Roles = "Customer")]
     [HttpGet(RouteConfigs.Customers)]
-    public IActionResult GetAllCustomers()
+    public async Task<IActionResult> GetAllCustomers()
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.Customers);
-        return Ok(_cusBL.GetAllCustomerProfile());
+        return Ok(await _cusBL.GetAllCustomerProfile());
       }
       catch (Exception e)
       {
@@ -48,12 +48,12 @@ namespace APIPortal.Controllers
     // GET: api/Customer/5
     [Authorize(Roles = "Customer")]
     [HttpGet(RouteConfigs.CustomerProfile)]
-    public IActionResult GetCustomerByID([FromQuery] Guid p_cusID)
+    public async Task<IActionResult> GetCustomerByID([FromQuery] Guid p_cusID)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.CustomerProfile);
-        return Ok(_cusBL.GetProfileByID(p_cusID));
+        return Ok(await _cusBL.GetProfileByID(p_cusID));
       }
       catch (Exception e)
       {
@@ -66,12 +66,12 @@ namespace APIPortal.Controllers
     // PUT: api/Customer
     [Authorize(Roles = "Customer")]
     [HttpPut(RouteConfigs.CustomerProfile)]
-    public IActionResult UpdateProfile([FromBody] CustomerProfile p_cus)
+    public async Task<IActionResult> UpdateProfile([FromBody] CustomerProfile p_cus)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.CustomerProfile);
-        return Ok(_cusBL.UpdateProfile(p_cus));
+        return Ok(await _cusBL.UpdateProfile(p_cus));
       }
       catch (Exception e)
       {
@@ -84,12 +84,12 @@ namespace APIPortal.Controllers
     // POST: api/Customer
     [Authorize(Roles = "Customer")]
     [HttpPost(RouteConfigs.CustomerProfile)]
-    public IActionResult AddProfile([FromBody] CustomerProfile p_cus)
+    public async Task<IActionResult> AddProfile([FromBody] CustomerProfile p_cus)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.CustomerProfile);
-        return Created("Succesfully created new customer profile!", _cusBL.AddNewCustomerProfile(p_cus));
+        return Created("Succesfully created new customer profile!", await _cusBL.AddNewCustomerProfile(p_cus));
       }
       catch (Exception e)
       {
@@ -105,12 +105,12 @@ namespace APIPortal.Controllers
     // POST: api/Order
     [Authorize(Roles = "Customer")]
     [HttpPost(RouteConfigs.CustomerOrder)]
-    public IActionResult CreateOrder([FromBody] Order p_order)
+    public async Task<IActionResult> CreateOrder([FromBody] Order p_order)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.CustomerOrder);
-        return Created("Succesfully created new order!", _orderBL.CreateOrder(p_order));
+        return Created("Succesfully created new order!", await _orderBL.CreateOrder(p_order));
       }
       catch (Exception e)
       {
@@ -123,12 +123,12 @@ namespace APIPortal.Controllers
     // PUT: api/Order
     [Authorize(Roles = "Customer")]
     [HttpPut(RouteConfigs.CustomerOrder)]
-    public IActionResult UpdateOrder([FromBody] Order p_order)
+    public async Task<IActionResult> UpdateOrder([FromBody] Order p_order)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.CustomerOrder);
-        return Ok(_orderBL.UpdateOrder(p_order));
+        return Ok(await _orderBL.UpdateOrder(p_order));
       }
       catch (Exception e)
       {
@@ -141,12 +141,12 @@ namespace APIPortal.Controllers
     // GET: api/Orders
     [Authorize(Roles = "Customer")]
     [HttpGet(RouteConfigs.CustomerOrders)]
-    public IActionResult GetAllCustomerOrders([FromQuery] Guid p_cusID)
+    public async Task<IActionResult> GetAllCustomerOrders([FromQuery] Guid p_cusID)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.CustomerOrders);
-        return Ok(_orderBL.GetAllOrdersByCustomerID(p_cusID));
+        return Ok(await _orderBL.GetAllOrdersByCustomerID(p_cusID));
       }
       catch (Exception e)
       {
@@ -159,12 +159,12 @@ namespace APIPortal.Controllers
     // GET: api/Orders
     [Authorize(Roles = "Customer")]
     [HttpGet(RouteConfigs.CustomerOrdersFilter)]
-    public IActionResult GetAllCustomerOrdersWithFilter(Guid p_cusID, string p_filter)
+    public async Task<IActionResult> GetAllCustomerOrdersWithFilter(Guid p_cusID, string p_filter)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.CustomerOrdersFilter);
-        return Ok(_orderBL.GetAllOrdersByCustomerIDWithFilter(p_cusID, p_filter));
+        return Ok(await _orderBL.GetAllOrdersByCustomerIDWithFilter(p_cusID, p_filter));
       }
       catch (Exception e)
       {
@@ -177,12 +177,12 @@ namespace APIPortal.Controllers
     // GET: api/Order/5
     [Authorize(Roles = "Customer")]
     [HttpGet(RouteConfigs.CustomerOrder)]
-    public IActionResult GetCustomerOrderByOrderID([FromQuery] Guid p_orderID)
+    public async Task<IActionResult> GetCustomerOrderByOrderID([FromQuery] Guid p_orderID)
     {
       try
       {
         Log.Information("Route: " + RouteConfigs.CustomerOrder);
-        return Ok(_orderBL.GetOrderByOrderID(p_orderID));
+        return Ok(await _orderBL.GetOrderByOrderID(p_orderID));
       }
       catch (Exception e)
       {

@@ -11,7 +11,7 @@ namespace DL.Implements
     {
       _connectionString = p_connectionString;
     }
-    public Product AddNewProduct(Product p_prod)
+    public async Task<Product> AddNewProduct(Product p_prod)
     {
       string _sqlQuery = @"INSERT INTO Products
                           (productID, productName, productPrice, productDesc, minimumAge, createdAt)
@@ -22,7 +22,7 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
@@ -33,13 +33,13 @@ namespace DL.Implements
         command.Parameters.AddWithValue("@minimumAge", p_prod.MinimumAge);
         command.Parameters.AddWithValue("@createdAt", p_prod.createdAt);
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
 
       return p_prod;
     }
 
-    public List<Product> GetAllProducts()
+    public async Task<List<Product>> GetAllProducts()
     {
       string _sqlQuery = @"SELECT productID, productName, productPrice, productDesc, minimumAge, createdAt
                           FROM Products;";
@@ -47,11 +47,11 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
-        SqlDataReader reader = command.ExecuteReader();
+        SqlDataReader reader = await command.ExecuteReaderAsync();
 
         while (reader.Read())
         {
@@ -70,7 +70,7 @@ namespace DL.Implements
       return _listOfProducts;
     }
 
-    public Product UpdateProduct(Product p_prod)
+    public async Task<Product> UpdateProduct(Product p_prod)
     {
       string _sqlQuery = @"UPDATE Products
                           SET productName=@productName, productPrice=@productPrice, productDesc=@productDesc, minimumAge=@minimumAge, createdAt=@createdAt
@@ -78,7 +78,7 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
@@ -89,7 +89,7 @@ namespace DL.Implements
         command.Parameters.AddWithValue("@createdAt", p_prod.createdAt);
         command.Parameters.AddWithValue("@productID", p_prod.ProductID);
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
 
       return p_prod;

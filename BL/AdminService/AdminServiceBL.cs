@@ -11,38 +11,43 @@ namespace BL.Implements
     {
       _repo = p_repo;
     }
-    public Product AddNewProduct(Product p_prod)
+    public async Task<Product> AddNewProduct(Product p_prod)
     {
-      if (GetAllProducts().Any(p => p.Name.Equals(p_prod.Name)))
+      List<Product> _listOfProduct = await GetAllProducts();
+
+      if (_listOfProduct.Any(p => p.Name.Equals(p_prod.Name)))
       {
         throw new Exception("Cannot add new product due to the name is already in the system!");
       }
-      return _repo.AddNewProduct(p_prod);
+      return await _repo.AddNewProduct(p_prod);
     }
 
-    public List<Product> GetAllProducts()
+    public async Task<List<Product>> GetAllProducts()
     {
-      return _repo.GetAllProducts();
+      return await _repo.GetAllProducts();
     }
 
-    public Product GetProductByID(Guid p_prodID)
+    public async Task<Product> GetProductByID(Guid p_prodID)
     {
-      return GetAllProducts().Find(p => p.ProductID.Equals(p_prodID));
+      List<Product> _listOfProduct = await GetAllProducts();
+      return _listOfProduct.Find(p => p.ProductID.Equals(p_prodID));
     }
 
-    public List<Product> SearchProductByName(string p_prodName)
+    public async Task<List<Product>> SearchProductByName(string p_prodName)
     {
-      return GetAllProducts().FindAll(p => p.Name.Contains(p_prodName));
+      List<Product> _listOfProduct = await GetAllProducts();
+      return _listOfProduct.FindAll(p => p.Name.Contains(p_prodName));
     }
 
-    public Product UpdateProduct(Product p_prod)
+    public async Task<Product> UpdateProduct(Product p_prod)
     {
-      List<Product> _listFilterProduct = GetAllProducts().FindAll(p => p.ProductID != p_prod.ProductID);
+      List<Product> _listOfProduct = await GetAllProducts();
+      List<Product> _listFilterProduct = _listOfProduct.FindAll(p => p.ProductID != p_prod.ProductID);
       if (_listFilterProduct.Any(p => p.Name.Equals(p_prod.Name)))
       {
         throw new Exception("Cannot update the product due to the name is already in the system!");
       }
-      return _repo.UpdateProduct(p_prod);
+      return await _repo.UpdateProduct(p_prod);
     }
   }
 }

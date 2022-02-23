@@ -19,7 +19,7 @@ namespace BL.Interfaces
     /// </summary>
     /// <param name="p_inven"></param>
     /// <returns></returns>
-    Inventory ImportNewProduct(Inventory p_inven);
+    Task<Inventory> ImportNewProduct(Inventory p_inven);
 
     /// <summary>
     /// Replenish the inventory by ID
@@ -27,26 +27,26 @@ namespace BL.Interfaces
     /// <param name="p_invenID"></param>
     /// <param name="p_quantity"></param>
     /// <returns></returns>
-    void ReplenishInventoryByID(Inventory p_inven);
+    Task ReplenishInventoryByID(Inventory p_inven);
 
     /// <summary>
     /// Get all Inventory of the store by store ID
     /// </summary>
     /// <param name="p_storeID"></param>
     /// <returns></returns>
-    List<Inventory> GetStoreInventoryByStoreID(Guid p_storeID);
+    Task<List<Inventory>> GetStoreInventoryByStoreID(Guid p_storeID);
 
     /// <summary>
     /// Get Inventory Detail
     /// </summary>
     /// <param name="p_invenID"></param>
     /// <returns></returns>
-    Inventory GetInventory(Inventory p_inven);
+    Task<Inventory> GetInventory(Inventory p_inven);
 
     /// <summary>
     /// Get All Inventories
     /// </summary>
     /// <returns></returns>
-    List<Inventory> GetAllInventory();
+    Task<List<Inventory>> GetAllInventory();
   }
 }

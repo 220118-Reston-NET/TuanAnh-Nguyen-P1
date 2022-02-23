@@ -12,33 +12,36 @@ namespace BL.Implements
       _repo = p_repo;
     }
 
-    public List<Inventory> GetAllInventory()
+    public async Task<List<Inventory>> GetAllInventory()
     {
-      return _repo.GetAllInventory();
+      return await _repo.GetAllInventory();
     }
 
-    public Inventory GetInventory(Inventory p_inven)
+    public async Task<Inventory> GetInventory(Inventory p_inven)
     {
-      return GetAllInventory().Find(p => p.ProductID.Equals(p_inven.ProductID) && p.StoreID.Equals(p_inven.StoreID));
+      List<Inventory> _listOfInventory = await GetAllInventory();
+      return _listOfInventory.Find(p => p.ProductID.Equals(p_inven.ProductID) && p.StoreID.Equals(p_inven.StoreID));
     }
 
-    public List<Inventory> GetStoreInventoryByStoreID(Guid p_storeID)
+    public async Task<List<Inventory>> GetStoreInventoryByStoreID(Guid p_storeID)
     {
-      return GetAllInventory().FindAll(p => p.StoreID.Equals(p_storeID));
+      List<Inventory> _listOfInventory = await GetAllInventory();
+      return _listOfInventory.FindAll(p => p.StoreID.Equals(p_storeID));
     }
 
-    public Inventory ImportNewProduct(Inventory p_inven)
+    public async Task<Inventory> ImportNewProduct(Inventory p_inven)
     {
-      if (GetStoreInventoryByStoreID(p_inven.StoreID).Any(p => p.ProductID.Equals(p_inven.ProductID)))
+      List<Inventory> _listOfInventory = await GetStoreInventoryByStoreID(p_inven.StoreID);
+      if (_listOfInventory.Any(p => p.ProductID.Equals(p_inven.ProductID)))
       {
         throw new Exception("Cannot import this product due to it already in the store! Please check the inventory!");
       }
-      return _repo.ImportNewProduct(p_inven);
+      return await _repo.ImportNewProduct(p_inven);
     }
 
-    public void ReplenishInventoryByID(Inventory p_inven)
+    public async Task ReplenishInventoryByID(Inventory p_inven)
     {
-      _repo.ReplenishInventoryByID(p_inven);
+      await _repo.ReplenishInventoryByID(p_inven);
     }
   }
 }

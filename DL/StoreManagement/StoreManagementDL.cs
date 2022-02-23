@@ -12,7 +12,7 @@ namespace DL.Implements
       _connectionString = p_connectionString;
     }
 
-    public StoreFrontProfile AddNewStoreFrontProfile(StoreFrontProfile p_store)
+    public async Task<StoreFrontProfile> AddNewStoreFrontProfile(StoreFrontProfile p_store)
     {
       string _sqlQuery = @"INSERT INTO StoreFronts
                           (storeID, storeName, storeAddress)
@@ -20,7 +20,7 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
@@ -28,13 +28,13 @@ namespace DL.Implements
         command.Parameters.AddWithValue("@storeName", p_store.Name);
         command.Parameters.AddWithValue("@storeAddress", p_store.Address);
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
 
       return p_store;
     }
 
-    public List<StoreFrontProfile> GetAllStoresProfile()
+    public async Task<List<StoreFrontProfile>> GetAllStoresProfile()
     {
       string _sqlQuery = @"SELECT storeID, storeName, storeAddress
                           FROM StoreFronts;";
@@ -43,11 +43,11 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
-        SqlDataReader reader = command.ExecuteReader();
+        SqlDataReader reader = await command.ExecuteReaderAsync();
 
         while (reader.Read())
         {
@@ -63,7 +63,7 @@ namespace DL.Implements
       return _listStores;
     }
 
-    public StoreFrontProfile UpdateStoreProfile(StoreFrontProfile p_store)
+    public async Task<StoreFrontProfile> UpdateStoreProfile(StoreFrontProfile p_store)
     {
       string _sqlQuery = @"UPDATE StoreFronts
                           SET storeName=@storeName, storeAddress=@storeAddress
@@ -71,7 +71,7 @@ namespace DL.Implements
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
-        conn.Open();
+        await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
@@ -79,7 +79,7 @@ namespace DL.Implements
         command.Parameters.AddWithValue("@storeAddress", p_store.Address);
         command.Parameters.AddWithValue("@storeID", p_store.StoreID);
 
-        command.ExecuteNonQuery();
+        await command.ExecuteNonQueryAsync();
       }
 
       return p_store;
