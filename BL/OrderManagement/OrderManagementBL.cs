@@ -13,7 +13,7 @@ namespace BL.Implements
     }
     public async Task AcceptOrderByOrderID(Guid p_orderID)
     {
-      _repo.AcceptOrderByOrderID(p_orderID);
+      await _repo.AcceptOrderByOrderID(p_orderID);
     }
 
     public async Task<Tracking> AddTrackingToOrder(Guid p_orderID, Tracking p_tracking)

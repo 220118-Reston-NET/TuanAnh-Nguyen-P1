@@ -40,12 +40,10 @@ namespace DL.Implements
       {
         await conn.OpenAsync();
 
-        SqlCommand command = new SqlCommand();
+        SqlCommand command = new SqlCommand(_sqlQuery, conn);
 
         foreach (var item in p_order.Cart)
         {
-          command = new SqlCommand(_sqlQuery, conn);
-
           command.Parameters.AddWithValue("@productID", item.ProductID);
           command.Parameters.AddWithValue("@orderID", p_order.OrderID);
           command.Parameters.AddWithValue("@quantity", item.Quantity);
@@ -334,7 +332,7 @@ namespace DL.Implements
 
         await command.ExecuteNonQueryAsync();
 
-        AddLineItemsToOrder(p_order);
+        await AddLineItemsToOrder(p_order);
       }
 
       return p_order;
