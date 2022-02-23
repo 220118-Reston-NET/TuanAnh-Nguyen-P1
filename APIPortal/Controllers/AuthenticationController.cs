@@ -41,9 +41,10 @@ namespace APIPortal.Controllers
     [HttpPost(RouteConfigs.Register)]
     public async Task<IActionResult> Register([FromBody] RegisterForm registerFrom)
     {
-      if (!(await _roleManager.RoleExistsAsync(registerFrom.Role)))
+      //Check if default Role is existed in the database ("Customer")
+      if (!(await _roleManager.RoleExistsAsync("Customer")))
       {
-        await _roleManager.CreateAsync(new IdentityRole(registerFrom.Role));
+        await _roleManager.CreateAsync(new IdentityRole("Customer"));
       }
 
       IdentityUser _identity = new IdentityUser()
@@ -59,11 +60,11 @@ namespace APIPortal.Controllers
       {
         var userFromDB = await _userManager.FindByNameAsync(_identity.UserName);
 
-        //Add role to user
-        await _userManager.AddToRoleAsync(userFromDB, registerFrom.Role);
+        // //Add default role to user ("Customer")
+        await _userManager.AddToRoleAsync(userFromDB, "Customer");
 
         Log.Warning("Route: " + RouteConfigs.Register);
-        Log.Information("Register Sucees " + userFromDB.UserName);
+        Log.Information("Register Sucees " + _identity.UserName);
         return Ok(new { Result = "Register Success!" });
       }
       else

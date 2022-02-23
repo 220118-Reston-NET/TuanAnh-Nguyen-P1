@@ -9,6 +9,7 @@ namespace APIPortal.Consts
     //ADMIN
     public const string Product = "Product";
     public const string Products = "Products";
+    public const string AddRoleToUser = "AddRoleToUser";
 
     //CUSTOMER
     public const string CustomerProfile = "CustomerProfile";

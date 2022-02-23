@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using Microsoft.AspNetCore.Authorization;
+using APIPortal.DataTransferObject;
+using Microsoft.AspNetCore.Identity;
 
 namespace APIPortal.Controllers
 {
@@ -17,9 +19,13 @@ namespace APIPortal.Controllers
   public class AdminController : ControllerBase
   {
     private readonly IAdminServiceBL _adminBL;
-    public AdminController(IAdminServiceBL p_adminBL)
+    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly UserManager<IdentityUser> _userManager;
+    public AdminController(IAdminServiceBL p_adminBL, RoleManager<IdentityRole> p_roleManager, UserManager<IdentityUser> p_userManager)
     {
       _adminBL = p_adminBL;
+      _roleManager = p_roleManager;
+      _userManager = p_userManager;
     }
 
     // GET: api/Products
@@ -91,6 +97,36 @@ namespace APIPortal.Controllers
         Log.Warning("Route: " + RouteConfigs.Product);
         Log.Warning(e.Message);
         return StatusCode(406, e);
+      }
+    }
+
+    // POST: api/Admin/UserRole
+    [Authorize(Roles = "Admin")]
+    [HttpPost(RouteConfigs.AddRoleToUser)]
+    public async Task<IActionResult> AddRoleToUser([FromBody] UserTransferObject p_userRole)
+    {
+      try
+      {
+        if (!(await _roleManager.RoleExistsAsync(p_userRole.Role)))
+        {
+          await _roleManager.CreateAsync(new IdentityRole(p_userRole.Role));
+        }
+
+        //Get User from DB
+        var userFromDB = await _userManager.FindByNameAsync(p_userRole.Username);
+
+        //Add Role to User
+        await _userManager.AddToRoleAsync(userFromDB, p_userRole.Role);
+
+        Log.Information("Route: " + RouteConfigs.AddRoleToUser);
+        Log.Information("Added Role to User Successfully!");
+        return Ok(new { Result = "Added Role to User Successfully!" });
+      }
+      catch (Exception e)
+      {
+        Log.Warning("Route: " + RouteConfigs.AddRoleToUser);
+        Log.Warning(e.Message);
+        return BadRequest();
       }
     }
   }
