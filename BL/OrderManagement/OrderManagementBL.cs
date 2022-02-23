@@ -84,7 +84,9 @@ namespace BL.Implements
 
     public async Task<List<Tracking>> GetAllTrackingByOrderID(Guid p_orderID)
     {
-      return await _repo.GetAllTrackingByOrderID(p_orderID);
+      List<Tracking> _listOfTracking = await GetTrackings();
+
+      return _listOfTracking.FindAll(p => p.OrderID.Equals(p_orderID));
     }
 
     public async Task<Order> GetOrderByOrderID(Guid p_orderID)
@@ -97,6 +99,11 @@ namespace BL.Implements
     {
       List<Tracking> _listOfTracking = await _repo.GetAllTrackings();
       return _listOfTracking.Find(p => p.TrackingID.Equals(p_trackingID));
+    }
+
+    public async Task<List<Tracking>> GetTrackings()
+    {
+      return await _repo.GetAllTrackings();
     }
 
     public async Task RejectOrderByOrderID(Guid p_orderID)

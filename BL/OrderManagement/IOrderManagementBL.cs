@@ -139,5 +139,11 @@ namespace BL.Interfaces
     /// <param name="p_orderID"></param>
     /// <returns></returns>
     Task<Order> GetOrderByOrderID(Guid p_orderID);
+
+    /// <summary>
+    /// Get All Trackings Information
+    /// </summary>
+    /// <returns></returns>
+    Task<List<Tracking>> GetTrackings();
   }
 }

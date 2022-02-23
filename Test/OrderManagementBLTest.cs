@@ -333,5 +333,99 @@ namespace Test
       // Assert
       Assert.Same(_expectedOrder, _actualOrder);
     }
+
+    [Fact]
+    public async Task Should_Get_All_Tracking()
+    {
+      // Arrange
+      List<Tracking> _expectedListOfAllTracking = new List<Tracking>();
+      Tracking _tracking1 = new Tracking()
+      {
+        TrackingID = Guid.Parse("383884c3-bf20-412b-bc65-d70ca80ddf5b"),
+        OrderID = Guid.Parse("9459e135-4de9-4566-88b2-85512b9e3bff"),
+        TrackingNumber = "1Z 091238 819204 9014"
+      };
+      Tracking _tracking2 = new Tracking()
+      {
+        TrackingID = Guid.Parse("6287cdb2-e83a-441b-a752-46f0e3c2ac75"),
+        OrderID = Guid.Parse("9459e135-4de9-4566-88b2-85512b9e3bff"),
+        TrackingNumber = "1Z 894012 719024 7891"
+      };
+      _expectedListOfAllTracking.Add(_tracking1);
+      _expectedListOfAllTracking.Add(_tracking2);
+
+      Mock<IOrderManagementDL> _mockRepo = new Mock<IOrderManagementDL>();
+      _mockRepo.Setup(repo => repo.GetAllTrackings()).ReturnsAsync(_expectedListOfAllTracking);
+      IOrderManagementBL _orderBL = new OrderManagementBL(_mockRepo.Object);
+
+      // Act
+      List<Tracking> _actualListOfTracking = await _orderBL.GetTrackings();
+
+      // Assert
+      Assert.Same(_expectedListOfAllTracking, _actualListOfTracking);
+    }
+
+    [Fact]
+    public async Task Should_Get_Tracking_By_ID()
+    {
+      // Arrange
+      List<Tracking> _listOfAllTracking = new List<Tracking>();
+      Tracking _tracking1 = new Tracking()
+      {
+        TrackingID = Guid.Parse("383884c3-bf20-412b-bc65-d70ca80ddf5b"),
+        OrderID = Guid.Parse("9459e135-4de9-4566-88b2-85512b9e3bff"),
+        TrackingNumber = "1Z 091238 819204 9014"
+      };
+      Tracking _tracking2 = new Tracking()
+      {
+        TrackingID = Guid.Parse("6287cdb2-e83a-441b-a752-46f0e3c2ac75"),
+        OrderID = Guid.Parse("9459e135-4de9-4566-88b2-85512b9e3bff"),
+        TrackingNumber = "1Z 894012 719024 7891"
+      };
+      _listOfAllTracking.Add(_tracking1);
+      _listOfAllTracking.Add(_tracking2);
+
+      Mock<IOrderManagementDL> _mockRepo = new Mock<IOrderManagementDL>();
+      _mockRepo.Setup(repo => repo.GetAllTrackings()).ReturnsAsync(_listOfAllTracking);
+      IOrderManagementBL _orderBL = new OrderManagementBL(_mockRepo.Object);
+
+      Tracking _expectedTracking = _tracking1;
+      // Act
+      Tracking _actualTracking = await _orderBL.GetTrackingNumberByID(_tracking1.TrackingID);
+
+      // Assert
+      Assert.Same(_expectedTracking, _actualTracking);
+    }
+
+    [Fact]
+    public async Task Should_Get_All_Trackings_By_OrderID()
+    {
+      // Arrange
+      List<Tracking> _expectedListOfAllTracking = new List<Tracking>();
+      Tracking _tracking1 = new Tracking()
+      {
+        TrackingID = Guid.Parse("383884c3-bf20-412b-bc65-d70ca80ddf5b"),
+        OrderID = Guid.Parse("9459e135-4de9-4566-88b2-85512b9e3bff"),
+        TrackingNumber = "1Z 091238 819204 9014"
+      };
+      Tracking _tracking2 = new Tracking()
+      {
+        TrackingID = Guid.Parse("6287cdb2-e83a-441b-a752-46f0e3c2ac75"),
+        OrderID = Guid.Parse("9459e135-4de9-4566-88b2-85512b9e3bff"),
+        TrackingNumber = "1Z 894012 719024 7891"
+      };
+      _expectedListOfAllTracking.Add(_tracking1);
+      _expectedListOfAllTracking.Add(_tracking2);
+
+      Mock<IOrderManagementDL> _mockRepo = new Mock<IOrderManagementDL>();
+      _mockRepo.Setup(repo => repo.GetAllTrackings()).ReturnsAsync(_expectedListOfAllTracking);
+      IOrderManagementBL _orderBL = new OrderManagementBL(_mockRepo.Object);
+
+      // Act
+      List<Tracking> _actualListOfTracking = await _orderBL.GetAllTrackingByOrderID(_tracking1.OrderID);
+
+      // Assert
+      Assert.Equal(_expectedListOfAllTracking.Count, _actualListOfTracking.Count);
+    }
   }
 }
