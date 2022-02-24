@@ -31,11 +31,12 @@ I seperated all of my methods into 5 main Controllers which have its own Roles t
 ## Customer Controller
 > Roles: Customer
 - Manage Profile
-- Manage their own orders
+- Manage their own orders(Check History, Status, Add more items to the order if the status still Order Placed, Cancel Order)
 - Request to open a new Store in the system
 ## Store Controller
 > Roles: Store Manager
 - Manage Profile
+- Manage store's inventory(Import new product, replenish inventory)
 - Manage store's orders(View, Accept, Reject, Complete and Manage Shipment of order)
 ## Home Controller
 > Roles: Everyone (AllowAnonymous)
@@ -47,12 +48,16 @@ I seperated all of my methods into 5 main Controllers which have its own Roles t
 - [Visual Studio Code](https://code.visualstudio.com)
 - [JSON](https://www.json.org/json-en.html)
 - [ADO.NET](https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/ado-net-overview)
-- [XUnit](https://xunit.net)
+- [xUnit](https://xunit.net)
 - [SeriLog](https://serilog.net)
+- [RESTful API](https://restfulapi.net)
 - [Azure](https://azure.microsoft.com/en-us/)
+- [Azure SQL Server](https://azure.microsoft.com/en-us/services/sql-database/campaign/)
 - [Azure DevOps](https://azure.microsoft.com/en-us/services/devops/)
-- [ASP.NET Web APIs](https://dotnet.microsoft.com/en-us/apps/aspnet/apis)
+- [ASP.NET Core Web APIs](https://dotnet.microsoft.com/en-us/apps/aspnet/apis)
 - [ASP.NET Identity](https://docs.microsoft.com/en-us/aspnet/identity/overview/getting-started/introduction-to-aspnet-identity)
+- [SonarQube](https://www.sonarqube.org)
+- [Swagger](https://swagger.io)
 - [DBeaver](https://dbeaver.io)
 - [Git](https://git-scm.com)
 - [Markdown](https://daringfireball.net/projects/markdown/)
