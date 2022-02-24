@@ -13,9 +13,5 @@ namespace Model
       Quantity = 0;
       PriceAtCheckedOut = 0;
     }
-    public override string ToString()
-    {
-      return $"Product ID: {ProductID}\nOrder ID: {OrderID}\nQuantity: {Quantity}\nPrice At Checked Out: {PriceAtCheckedOut}";
-    }
   }
 }

@@ -19,13 +19,18 @@ namespace APIPortal.Controllers
   public class AdminController : ControllerBase
   {
     private readonly IAdminServiceBL _adminBL;
+    private readonly IStoreManagementBL _storeBL;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly UserManager<IdentityUser> _userManager;
-    public AdminController(IAdminServiceBL p_adminBL, RoleManager<IdentityRole> p_roleManager, UserManager<IdentityUser> p_userManager)
+    public AdminController(IAdminServiceBL p_adminBL,
+                            RoleManager<IdentityRole> p_roleManager,
+                            UserManager<IdentityUser> p_userManager,
+                            IStoreManagementBL p_storeBL)
     {
       _adminBL = p_adminBL;
       _roleManager = p_roleManager;
       _userManager = p_userManager;
+      _storeBL = p_storeBL;
     }
 
     // GET: api/Products
@@ -103,23 +108,28 @@ namespace APIPortal.Controllers
     // POST: api/Admin/UserRole
     [Authorize(Roles = "Admin")]
     [HttpPost(RouteConfigs.AddRoleToUser)]
-    public async Task<IActionResult> AddRoleToUser([FromBody] UserTransferObject p_userRole)
+    public async Task<IActionResult> AddStoreManagerRoleToUser([FromQuery] string p_username)
     {
       try
       {
-        if (!(await _roleManager.RoleExistsAsync(p_userRole.Role)))
+        if (!(await _roleManager.RoleExistsAsync("StoreManager")))
         {
-          await _roleManager.CreateAsync(new IdentityRole(p_userRole.Role));
+          await _roleManager.CreateAsync(new IdentityRole("StoreManager"));
         }
 
         //Get User from DB
-        var userFromDB = await _userManager.FindByNameAsync(p_userRole.Username);
+        var userFromDB = await _userManager.FindByNameAsync(p_username);
 
-        //Add Role to User
-        await _userManager.AddToRoleAsync(userFromDB, p_userRole.Role);
+        //Add Store Manager Role to User
+        await _userManager.AddToRoleAsync(userFromDB, "StoreManager");
+
+        StoreFrontProfile _storeF = new StoreFrontProfile();
+        _storeF.StoreID = Guid.Parse(userFromDB.Id);
+        _storeF.Name = $"{userFromDB.UserName}'s Store";
+        _storeBL.AddNewStoreFrontProfile(_storeF);
 
         Log.Information("Route: " + RouteConfigs.AddRoleToUser);
-        Log.Information("Added Role to User Successfully!");
+        Log.Information("Added Store Manager Role to User Successfully!");
         return Ok(new { Result = "Added Role to User Successfully!" });
       }
       catch (Exception e)

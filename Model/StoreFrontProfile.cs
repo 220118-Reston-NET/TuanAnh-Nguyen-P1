@@ -11,9 +11,5 @@ namespace Model
       Name = "";
       Address = "";
     }
-    public override string ToString()
-    {
-      return $"Store ID: {StoreID}\nName: {Name}\nAddress: {Address}";
-    }
   }
 }

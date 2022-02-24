@@ -82,24 +82,6 @@ namespace APIPortal.Controllers
       }
     }
 
-    // POST: api/Store
-    [Authorize(Roles = "StoreManager")]
-    [HttpPost(RouteConfigs.StoreProfile)]
-    public async Task<IActionResult> AddNewStoreProfile([FromBody] StoreFrontProfile p_store)
-    {
-      try
-      {
-        Log.Information("Route: " + RouteConfigs.StoreProfile);
-        return Created("Successfully created new store front profile!", await _storeBL.AddNewStoreFrontProfile(p_store));
-      }
-      catch (Exception e)
-      {
-        Log.Warning("Route: " + RouteConfigs.StoreProfile);
-        Log.Warning(e.Message);
-        return StatusCode(500, e);
-      }
-    }
-
     /*
         STORE INVENTORY MANAGEMENT
     */

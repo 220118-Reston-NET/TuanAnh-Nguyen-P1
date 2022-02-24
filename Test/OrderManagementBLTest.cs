@@ -427,5 +427,95 @@ namespace Test
       // Assert
       Assert.Equal(_expectedListOfAllTracking.Count, _actualListOfTracking.Count);
     }
+
+    [Fact]
+    public async Task Should_Not_Cancel_Order_From_User_Due_To_Status_Preparing()
+    {
+      // Arrange
+      List<Order> _listOfAllOrders = new List<Order>();
+      Order _order1 = new Order()
+      {
+        OrderID = Guid.Parse("e5228c5d-5fe9-4147-82ca-54d202cca632"),
+        TotalPrice = 2900,
+        StoreID = Guid.Parse("d270786b-3c63-4576-bca3-13b1be8ddc7b"),
+        CustomerID = Guid.Parse("9459e135-4de9-4566-88b2-85512b9e3bff"),
+        createdAt = new DateTime(2022 - 02 - 07),
+        Status = "Preparing",
+        Cart = new List<LineItem>(),
+        Shipments = new List<Tracking>()
+      };
+      _listOfAllOrders.Add(_order1);
+
+      Mock<IOrderManagementDL> _mockRepo = new Mock<IOrderManagementDL>();
+      _mockRepo.Setup(repo => repo.GetAllOrders()).ReturnsAsync(_listOfAllOrders);
+      IOrderManagementBL _orderBL = new OrderManagementBL(_mockRepo.Object);
+
+      Order _cancelOrder = new Order();
+      // Act & Assert
+      // Shouldn't cancel the order due to the order status is not "Order Placed"
+      await Assert.ThrowsAsync<System.Exception>(
+        async () => await _orderBL.CancelOrderByOrderID(_order1.OrderID)
+      );
+    }
+
+    [Fact]
+    public async Task Should_Not_Able_To_Update_Order_From_User_Due_To_Status_Preparing()
+    {
+      // Arrange
+      List<Order> _listOfAllOrders = new List<Order>();
+      Order _order1 = new Order()
+      {
+        OrderID = Guid.Parse("e5228c5d-5fe9-4147-82ca-54d202cca632"),
+        TotalPrice = 2900,
+        StoreID = Guid.Parse("d270786b-3c63-4576-bca3-13b1be8ddc7b"),
+        CustomerID = Guid.Parse("9459e135-4de9-4566-88b2-85512b9e3bff"),
+        createdAt = new DateTime(2022 - 02 - 07),
+        Status = "Preparing",
+        Cart = new List<LineItem>(),
+        Shipments = new List<Tracking>()
+      };
+      _listOfAllOrders.Add(_order1);
+
+      Mock<IOrderManagementDL> _mockRepo = new Mock<IOrderManagementDL>();
+      _mockRepo.Setup(repo => repo.GetAllOrders()).ReturnsAsync(_listOfAllOrders);
+      IOrderManagementBL _orderBL = new OrderManagementBL(_mockRepo.Object);
+
+      Order _cancelOrder = new Order();
+      // Act & Assert
+      // Shouldn't cancel the order due to the order status is not "Order Placed"
+      await Assert.ThrowsAsync<System.Exception>(
+        async () => await _orderBL.UpdateOrder(_order1)
+      );
+    }
+
+    [Fact]
+    public async Task Should_Not_Add_Same_TrackingNumber()
+    {
+      // Arrange
+      List<Tracking> _expectedListOfAllTracking = new List<Tracking>();
+      Tracking _tracking1 = new Tracking()
+      {
+        TrackingID = Guid.Parse("383884c3-bf20-412b-bc65-d70ca80ddf5b"),
+        OrderID = Guid.Parse("9459e135-4de9-4566-88b2-85512b9e3bff"),
+        TrackingNumber = "1Z 091238 819204 9014"
+      };
+      _expectedListOfAllTracking.Add(_tracking1);
+
+      Mock<IOrderManagementDL> _mockRepo = new Mock<IOrderManagementDL>();
+      _mockRepo.Setup(repo => repo.GetAllTrackings()).ReturnsAsync(_expectedListOfAllTracking);
+      IOrderManagementBL _orderBL = new OrderManagementBL(_mockRepo.Object);
+
+      Tracking _tracking2 = new Tracking()
+      {
+        TrackingID = Guid.Parse("383884c3-bf20-412b-bc65-d70ca80ddf5b"),
+        OrderID = Guid.Parse("9459e135-4de9-4566-88b2-85512b9e3bff"),
+        TrackingNumber = "1Z 091238 819204 9014"
+      };
+      // Act & Assert
+      // Shouldn't cancel the order due to the order status is not "Order Placed"
+      await Assert.ThrowsAsync<System.Exception>(
+        async () => await _orderBL.AddTrackingToOrder(_tracking2.OrderID, _tracking2)
+      );
+    }
   }
 }

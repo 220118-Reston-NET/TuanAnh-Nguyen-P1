@@ -11,9 +11,5 @@ namespace Model
       ProductID = Guid.NewGuid();
       Quantity = 0;
     }
-    public override string ToString()
-    {
-      return $"Store ID: {StoreID}\nProduct ID: {ProductID}\nQuantity: {Quantity}";
-    }
   }
 }

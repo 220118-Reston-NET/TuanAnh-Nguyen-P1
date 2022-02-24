@@ -169,5 +169,116 @@ namespace Test
         })
       );
     }
+
+    [Fact]
+    public async Task Should_Not_Add_New_Customer_Due_To_Email()
+    {
+      // Arrange
+      List<CustomerProfile> _expectedListOfCustomers = new List<CustomerProfile>();
+      _expectedListOfCustomers.Add(new CustomerProfile()
+      {
+        CustomerID = Guid.NewGuid(),
+        FirstName = "Tester",
+        LastName = "TestLast",
+        Address = "San Diego, CA",
+        Email = "tester@gmail.com",
+        PhoneNumber = "9018273645",
+        DateOfBirth = new DateTime(1990 - 02 - 03),
+      });
+
+      Mock<ICustomerManagementDL> _mockRepo = new Mock<ICustomerManagementDL>();
+      _mockRepo.Setup(repo => repo.GetAllCustomerProfile()).ReturnsAsync(_expectedListOfCustomers);
+      ICustomerManagementBL _cusBL = new CustomerManagementBL(_mockRepo.Object);
+
+      CustomerProfile _newCus = new CustomerProfile();
+      // Act & Assert
+      // Shouldn't add new customer due to the email is existing in the database
+      await Assert.ThrowsAsync<System.Exception>(
+        async () => _newCus = await _cusBL.AddNewCustomerProfile(new CustomerProfile()
+        {
+          CustomerID = Guid.NewGuid(),
+          FirstName = "Teqwvqwvster",
+          LastName = "TestLasttttt",
+          Address = "Boston, MA",
+          Email = "tester@gmail.com",
+          PhoneNumber = "1804273655",
+          DateOfBirth = new DateTime(1990 - 02 - 03),
+        })
+      );
+    }
+
+    [Fact]
+    public async Task Should_Not_Add_New_Customer_Due_To_PhoneNumber()
+    {
+      // Arrange
+      List<CustomerProfile> _expectedListOfCustomers = new List<CustomerProfile>();
+      _expectedListOfCustomers.Add(new CustomerProfile()
+      {
+        CustomerID = Guid.NewGuid(),
+        FirstName = "Tester",
+        LastName = "TestLast",
+        Address = "San Diego, CA",
+        Email = "tester@gmail.com",
+        PhoneNumber = "9018273645",
+        DateOfBirth = new DateTime(1990 - 02 - 03),
+      });
+
+      Mock<ICustomerManagementDL> _mockRepo = new Mock<ICustomerManagementDL>();
+      _mockRepo.Setup(repo => repo.GetAllCustomerProfile()).ReturnsAsync(_expectedListOfCustomers);
+      ICustomerManagementBL _cusBL = new CustomerManagementBL(_mockRepo.Object);
+
+      CustomerProfile _newCus = new CustomerProfile();
+      // Act & Assert
+      // Shouldn't add new customer due to the phone number is existing in the database
+      await Assert.ThrowsAsync<System.Exception>(
+        async () => _newCus = await _cusBL.AddNewCustomerProfile(new CustomerProfile()
+        {
+          CustomerID = Guid.NewGuid(),
+          FirstName = "Teqwvqwvster",
+          LastName = "TestLasttttt",
+          Address = "Bosqton, MA",
+          Email = "testeqwvqwr@gmail.com",
+          PhoneNumber = "9018273645",
+          DateOfBirth = new DateTime(1990 - 02 - 03),
+        })
+      );
+    }
+
+    [Fact]
+    public async Task Should_Not_Update_Customer_Due_To_PhoneNumber()
+    {
+      // Arrange
+      List<CustomerProfile> _expectedListOfCustomers = new List<CustomerProfile>();
+      _expectedListOfCustomers.Add(new CustomerProfile()
+      {
+        CustomerID = Guid.NewGuid(),
+        FirstName = "Tester",
+        LastName = "TestLast",
+        Address = "San Diego, CA",
+        Email = "tester@gmail.com",
+        PhoneNumber = "9018273645",
+        DateOfBirth = new DateTime(1990 - 02 - 03),
+      });
+
+      Mock<ICustomerManagementDL> _mockRepo = new Mock<ICustomerManagementDL>();
+      _mockRepo.Setup(repo => repo.GetAllCustomerProfile()).ReturnsAsync(_expectedListOfCustomers);
+      ICustomerManagementBL _cusBL = new CustomerManagementBL(_mockRepo.Object);
+
+      CustomerProfile _newCus = new CustomerProfile();
+      // Act & Assert
+      // Shouldn't update customer due to the phone number is existing in the database
+      await Assert.ThrowsAsync<System.Exception>(
+        async () => _newCus = await _cusBL.UpdateProfile(new CustomerProfile()
+        {
+          CustomerID = Guid.NewGuid(),
+          FirstName = "Teqwvqwvster",
+          LastName = "TestLasttttt",
+          Address = "Bosqton, MA",
+          Email = "testeqwvqwr@gmail.com",
+          PhoneNumber = "9018273645",
+          DateOfBirth = new DateTime(1990 - 02 - 03),
+        })
+      );
+    }
   }
 }

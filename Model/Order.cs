@@ -25,9 +25,5 @@ namespace Model
       };
       createdAt = DateTime.UtcNow;
     }
-    public override string ToString()
-    {
-      return $"Order ID: {OrderID}]\nCustomer ID: {CustomerID}\nStore ID: {StoreID}\n Cart: {Cart}\nTotal Price: {TotalPrice}\nStatus: {Status}\nShipments: {Shipments}\nCreated At: {createdAt}";
-    }
   }
 }

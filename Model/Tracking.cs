@@ -11,9 +11,5 @@ namespace Model
       OrderID = Guid.NewGuid();
       TrackingNumber = "";
     }
-    public override string ToString()
-    {
-      return $"TrackingID: {TrackingID}\nOrder ID: {OrderID}\nTracking Number: {TrackingNumber}";
-    }
   }
 }

@@ -19,10 +19,6 @@
       PhoneNumber = "";
       DateOfBirth = DateTime.UtcNow;
     }
-    public override string ToString()
-    {
-      return $"Customer ID: {CustomerID}\nAddress: {Address}\nEmail: {Email}\nPhone Number: {PhoneNumber}\nDate Of Birth: {DateOfBirth}";
-    }
   }
 }
 

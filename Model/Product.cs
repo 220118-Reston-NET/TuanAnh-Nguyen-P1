@@ -17,9 +17,5 @@ namespace Model
       MinimumAge = 0;
       createdAt = DateTime.UtcNow;
     }
-    public override string ToString()
-    {
-      return $"Product ID: {ProductID}\nName: {Name}\nPrice: {Price}\nDescription: {Description}\nMinimum Age: {MinimumAge}\nCreated At: {createdAt}";
-    }
   }
 }

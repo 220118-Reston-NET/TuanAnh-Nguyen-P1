@@ -81,24 +81,6 @@ namespace APIPortal.Controllers
       }
     }
 
-    // POST: api/Customer
-    [Authorize(Roles = "Customer")]
-    [HttpPost(RouteConfigs.CustomerProfile)]
-    public async Task<IActionResult> AddProfile([FromBody] CustomerProfile p_cus)
-    {
-      try
-      {
-        Log.Information("Route: " + RouteConfigs.CustomerProfile);
-        return Created("Succesfully created new customer profile!", await _cusBL.AddNewCustomerProfile(p_cus));
-      }
-      catch (Exception e)
-      {
-        Log.Warning("Route: " + RouteConfigs.CustomerProfile);
-        Log.Warning(e.Message);
-        return StatusCode(406, e);
-      }
-    }
-
     /*
       CUSTOMER ORDER MANAGEMENT
     */
@@ -107,6 +89,20 @@ namespace APIPortal.Controllers
     [HttpPost(RouteConfigs.CustomerOrder)]
     public async Task<IActionResult> CreateOrder([FromBody] Order p_order)
     {
+      CustomerProfile _cusInfo = await _cusBL.GetProfileByID(p_order.CustomerID);
+      if (string.IsNullOrEmpty(_cusInfo.FirstName))
+      {
+        return BadRequest(new { Result = "Firstname should not be empty! You need to update your profile before placing order!" });
+      }
+      if (string.IsNullOrEmpty(_cusInfo.LastName))
+      {
+        return BadRequest(new { Result = "Lastname should not be empty! You need to update your profile before placing order!" });
+      }
+      if (string.IsNullOrEmpty(_cusInfo.Address))
+      {
+        return BadRequest(new { Result = "Address should not be empty! You need to update your profile before placing order!" });
+      }
+
       try
       {
         Log.Information("Route: " + RouteConfigs.CustomerOrder);
