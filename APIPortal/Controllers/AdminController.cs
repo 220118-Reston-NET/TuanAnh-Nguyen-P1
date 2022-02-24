@@ -126,7 +126,7 @@ namespace APIPortal.Controllers
         StoreFrontProfile _storeF = new StoreFrontProfile();
         _storeF.StoreID = Guid.Parse(userFromDB.Id);
         _storeF.Name = $"{userFromDB.UserName}'s Store";
-        _storeBL.AddNewStoreFrontProfile(_storeF);
+        await _storeBL.AddNewStoreFrontProfile(_storeF);
 
         Log.Information("Route: " + RouteConfigs.AddRoleToUser);
         Log.Information("Added Store Manager Role to User Successfully!");
