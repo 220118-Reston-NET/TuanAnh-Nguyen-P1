@@ -1,3 +1,5 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # Project 1 - Tuan Anh Nguyen
 
 > My Project1 is focus on the Web APIs with Authenticaion and Authorization by using the ASP.NET Web APIs and ASP.NET Identity.
@@ -16,6 +18,7 @@
   - [v1.0.0](#v100)
 - [Contributing](#contributing)
 - [Contacts](#contacts)
+- [License](#license)
 
 # Features
 
@@ -72,5 +75,9 @@ As I did this project for the course, so if you want to have more features, plea
 # Contacts
 - Github: [@kirasn](https://github.com/kirasn)
 - Website: [http://www.kiranguyen.com](http://www.kiranguyen.com)
+
+# License
+
+This project is licensed under the [MIT License](LICENSE).
 
 [Back To Top](#project-1---tuan-anh-nguyen)

@@ -1,0 +1,11 @@
+bin
+obj
+
+# Ignore local change during development
+logs
+publish
+
+# macOS
+.DS_Store
+.vscode
+appsettings.json
