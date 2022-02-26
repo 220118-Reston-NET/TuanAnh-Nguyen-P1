@@ -4,15 +4,21 @@ using APIPortal.AuthenticationService.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Primitives;
 
 namespace APIPortal.AuthenticationService.Implements
 {
   public class AccessTokenManager : IAccessTokenManager
   {
+    private readonly IDistributedCache accessTokensCache;
+    private readonly IHttpContextAccessor httpContextAccessor;
     private readonly IConfiguration _config;
-    public AccessTokenManager(IConfiguration config)
+    public AccessTokenManager(IConfiguration config, IDistributedCache distributedCache, IHttpContextAccessor httpContextAccessor)
     {
       _config = config;
+      accessTokensCache = distributedCache;
+      this.httpContextAccessor = httpContextAccessor;
     }
     public string GenerateToken(IdentityUser user, IList<string> roles)
     {
@@ -43,5 +49,21 @@ namespace APIPortal.AuthenticationService.Implements
 
       return tokenHandler.WriteToken(accessToken);
     }
+
+    public async Task<bool> IsActiveAsync(string token)
+    {
+      return await accessTokensCache.GetStringAsync(GetKey(token)) == null;
+    }
+
+    public async Task<bool> IsCurrentActiveToken() => await IsActiveAsync(GetCurrentAsync());
+
+    private string GetCurrentAsync()
+    {
+      var authorizationHeader = httpContextAccessor.HttpContext.Request.Headers["authorization"];
+
+      return authorizationHeader == StringValues.Empty ? string.Empty : authorizationHeader.Single().Split(" ").Last();
+    }
+
+    private static string GetKey(string token) => $"tokens:{token}:deactivated";
   }
 }

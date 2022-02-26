@@ -9,6 +9,7 @@ using APIPortal.Areas.Identity.Data;
 using APIPortal.AuthenticationService.Interfaces;
 using APIPortal.Consts;
 using APIPortal.DataTransferObject;
+using APIPortal.FilterAttributes;
 using BL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,7 @@ namespace APIPortal.Controllers
 {
   [AllowAnonymous]
   [Route("api/[controller]")]
+  [RequestRateLimit(Name = "api/Authentication", MaximumRequests = 10, Duration = 60)]
   [ApiController]
   public class AuthenticationController : ControllerBase
   {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using APIPortal.Consts;
+using APIPortal.FilterAttributes;
 using BL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ namespace APIPortal.Controllers
 {
   [AllowAnonymous]
   [Route("api/[controller]")]
+  [RequestRateLimit(Name = "api/Home", MaximumRequests = 10, Duration = 60)]
   [ApiController]
   public class HomeController : ControllerBase
   {

@@ -11,12 +11,19 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using APIPortal.AuthenticationService.Interfaces;
 using APIPortal.AuthenticationService.Implements;
+using APIPortal.FilterAttributes;
+using APIPortal.AuthenticationService.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 Log.Logger = new LoggerConfiguration().WriteTo.File("./logs/server.txt").CreateLogger();
 
 // Add services to the container.
 var key = builder.Configuration["Token:Key"];
+
+// configure for distributed memory cache
+builder.Services.AddSingleton<IAccessTokenManager, AccessTokenManager>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddDistributedMemoryCache();
 
 //Identity Role
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(x =>
@@ -26,9 +33,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(x =>
   x.User.RequireUniqueEmail = true;
 })
 .AddEntityFrameworkStores<UserDbContext>();
-
-
-builder.Services.AddScoped<IAccessTokenManager, AccessTokenManager>();
 
 //Authentication
 builder.Services.AddAuthentication(x =>
@@ -52,7 +56,7 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c => c.OperationFilter<AuthorizationHeaderParameterOperationFilter>());
 
 builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Reference2DB")));
@@ -79,6 +83,9 @@ if (app.Environment.IsDevelopment())
   app.UseSwagger();
   app.UseSwaggerUI();
 }
+
+//Apply middlewares
+app.UseTokenManagerMiddleware();
 
 app.UseHttpsRedirection();
 
