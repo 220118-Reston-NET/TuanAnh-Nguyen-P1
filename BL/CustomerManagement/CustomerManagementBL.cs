@@ -19,10 +19,6 @@ namespace BL.Implements
       {
         throw new Exception("Cannot add new customer profile due to the email is existing in the system!");
       }
-      if (_listOfCustomerProfile.Any(p => p.PhoneNumber.Equals(p_cus.PhoneNumber)))
-      {
-        throw new Exception("Cannot add new customer profile due to the phone number is existing in the system!");
-      }
       return await _repo.AddNewCustomerProfile(p_cus);
     }
 

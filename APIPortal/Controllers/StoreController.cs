@@ -145,16 +145,18 @@ namespace APIPortal.Controllers
     [HttpPost(RouteConfigs.Inventory)]
     public async Task<IActionResult> ImportProduct([FromBody] Inventory p_inven)
     {
+      Task taskImportProduct = _invenBL.ImportNewProduct(p_inven);
       try
       {
+        await taskImportProduct;
         Log.Information("Route: " + RouteConfigs.Inventory);
-        return Ok(await _invenBL.ImportNewProduct(p_inven));
+        return Ok(new { Results = "Imported new product successfully!" });
       }
       catch (Exception e)
       {
         Log.Warning("Route: " + RouteConfigs.Inventory);
         Log.Warning(e.Message);
-        return StatusCode(406, e);
+        return BadRequest(new { Results = "This Product is already in the store's inventory" });
       }
     }
 

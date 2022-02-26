@@ -44,6 +44,7 @@ namespace DL.Implements
 
         foreach (var item in p_order.Cart)
         {
+          command = new SqlCommand(_sqlQuery, conn);
           command.Parameters.AddWithValue("@productID", item.ProductID);
           command.Parameters.AddWithValue("@orderID", p_order.OrderID);
           command.Parameters.AddWithValue("@quantity", item.Quantity);

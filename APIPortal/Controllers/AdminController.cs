@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using Microsoft.AspNetCore.Authorization;
-using APIPortal.DataTransferObject;
 using Microsoft.AspNetCore.Identity;
 
 namespace APIPortal.Controllers
@@ -74,16 +73,18 @@ namespace APIPortal.Controllers
     [HttpPost(RouteConfigs.Product)]
     public async Task<IActionResult> AddProduct([FromBody] Product p_prod)
     {
+      Task taskAddProduct = _adminBL.AddNewProduct(p_prod);
       try
       {
-        Log.Information("Route: " + RouteConfigs.Product);
-        return Created("Succesfully created a new product!", await _adminBL.AddNewProduct(p_prod));
+        await taskAddProduct;
+        Log.Warning("Route: " + RouteConfigs.Product);
+        return Created("Created a new product success!", p_prod);
       }
       catch (Exception e)
       {
         Log.Warning("Route: " + RouteConfigs.Product);
         Log.Warning(e.Message);
-        return StatusCode(406, e);
+        return BadRequest(new { Results = "This product is already in the system!" });
       }
     }
 
@@ -92,16 +93,18 @@ namespace APIPortal.Controllers
     [HttpPut(RouteConfigs.Product)]
     public async Task<IActionResult> UpdateProduct([FromBody] Product p_prod)
     {
+      Task taskUpdateProduct = _adminBL.UpdateProduct(p_prod);
       try
       {
+        await taskUpdateProduct;
         Log.Information("Route: " + RouteConfigs.Product);
-        return Ok(await _adminBL.UpdateProduct(p_prod));
+        return Ok(new { Results = "Updated Succesfully!" });
       }
       catch (Exception e)
       {
         Log.Warning("Route: " + RouteConfigs.Product);
         Log.Warning(e.Message);
-        return StatusCode(406, e);
+        return BadRequest(new { Results = "Cannot find the product detail to update! Please check the Product ID" });
       }
     }
 
