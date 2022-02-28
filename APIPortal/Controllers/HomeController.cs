@@ -38,7 +38,7 @@ namespace APIPortal.Controllers
         {
           if (limit != 0)
           {
-            PaggedExtensions<Product> _product = new PaggedExtensions<Product>();
+            PaginationExtensions<Product> _product = new PaginationExtensions<Product>();
             var result = _product.Pagged(_listProducts, limit, page);
             Log.Information("Route: " + RouteConfigs.Products);
             return Ok(result);

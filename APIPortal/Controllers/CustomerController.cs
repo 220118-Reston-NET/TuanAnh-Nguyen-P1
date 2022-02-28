@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using APIPortal.FilterAttributes;
 using APIPortal.DataTransferObject;
 using APIPortal.Extensions;
+using static APIPortal.Extensions.OrderByAndFilterExtension;
 
 namespace APIPortal.Controllers
 {
@@ -25,19 +26,19 @@ namespace APIPortal.Controllers
     private readonly ICustomerManagementBL _cusBL;
     private readonly IOrderManagementBL _orderBL;
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly IHttpContextAccessor httpContextAccessor;
-    private string given_name;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly string? given_name;
     public CustomerController(ICustomerManagementBL p_cusBL,
                               IOrderManagementBL p_orderBL,
                               UserManager<IdentityUser> p_userManager,
-                              IHttpContextAccessor httpContextAccessor)
+                              IHttpContextAccessor p_httpContextAccessor)
     {
       _cusBL = p_cusBL;
       _orderBL = p_orderBL;
       _userManager = p_userManager;
-      this.httpContextAccessor = httpContextAccessor;
+      _httpContextAccessor = p_httpContextAccessor;
 
-      var token = httpContextAccessor.HttpContext.Request.Headers["authorization"].Single().Split(" ").Last();
+      var token = _httpContextAccessor.HttpContext.Request.Headers["authorization"].Single().Split(" ").Last();
       var tokenHandler = new JwtSecurityTokenHandler();
       given_name = tokenHandler.ReadJwtToken(token).Payload["given_name"].ToString();
     }
@@ -110,7 +111,7 @@ namespace APIPortal.Controllers
     // GET: api/Customer/Orders
     [Authorize(Roles = "Customer")]
     [HttpGet(RouteConfigs.CustomerOrders)]
-    public async Task<IActionResult> GetAllCustomerOrders([FromQuery] int limit, int page)
+    public async Task<IActionResult> GetAllCustomerOrders([FromQuery] int limit, int page, string? orderby, string? filter)
     {
       var userFromDB = await _userManager.FindByNameAsync(given_name);
       Guid p_cusID = Guid.Parse(userFromDB.Id);
@@ -120,9 +121,15 @@ namespace APIPortal.Controllers
         var _listOrders = await _orderBL.GetAllOrdersByCustomerID(p_cusID);
         if (_listOrders.Count != 0)
         {
+          if (orderby != null || filter != null)
+          {
+            OrderByAndFilterExtension _orderFilter = new OrderByAndFilterExtension();
+
+            _listOrders = _orderFilter.OrderByAndFilterExtensionForOrder(_listOrders, orderby, filter);
+          }
           if (limit != 0)
           {
-            PaggedExtensions<Order> _order = new PaggedExtensions<Order>();
+            PaginationExtensions<Order> _order = new PaginationExtensions<Order>();
             var result = _order.Pagged(_listOrders, limit, page);
             Log.Information("Route: " + RouteConfigs.CustomerOrders);
             return Ok(result);
@@ -235,31 +242,6 @@ namespace APIPortal.Controllers
         Log.Warning("Route: " + RouteConfigs.CustomerOrder);
         Log.Warning(e.Message);
         return StatusCode(406, e);
-      }
-    }
-
-
-
-
-
-
-
-    //TODO FILTERRRRR
-    // GET: api/Orders
-    [Authorize(Roles = "Customer")]
-    [HttpGet(RouteConfigs.CustomerOrdersFilter)]
-    public async Task<IActionResult> GetAllCustomerOrdersWithFilter(Guid p_cusID, string p_filter)
-    {
-      try
-      {
-        Log.Information("Route: " + RouteConfigs.CustomerOrdersFilter);
-        return Ok(await _orderBL.GetAllOrdersByCustomerIDWithFilter(p_cusID, p_filter));
-      }
-      catch (Exception e)
-      {
-        Log.Warning("Route: " + RouteConfigs.CustomerOrdersFilter);
-        Log.Warning(e.Message);
-        return NotFound(e);
       }
     }
   }

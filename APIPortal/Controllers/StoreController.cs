@@ -26,21 +26,21 @@ namespace APIPortal.Controllers
     private readonly IInventoryManagementBL _invenBL;
     private readonly IOrderManagementBL _orderBL;
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly IHttpContextAccessor httpContextAccessor;
-    private string given_name;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly string? given_name;
     public StoreController(IStoreManagementBL p_storeBL,
                             IInventoryManagementBL p_invenBL,
                             IOrderManagementBL p_orderBL,
                             UserManager<IdentityUser> p_userManager,
-                            IHttpContextAccessor httpContextAccessor)
+                            IHttpContextAccessor p_httpContextAccessor)
     {
       _storeBL = p_storeBL;
       _invenBL = p_invenBL;
       _orderBL = p_orderBL;
       _userManager = p_userManager;
-      this.httpContextAccessor = httpContextAccessor;
+      _httpContextAccessor = p_httpContextAccessor;
 
-      var token = httpContextAccessor.HttpContext.Request.Headers["authorization"].Single().Split(" ").Last();
+      var token = _httpContextAccessor.HttpContext.Request.Headers["authorization"].Single().Split(" ").Last();
       var tokenHandler = new JwtSecurityTokenHandler();
       given_name = tokenHandler.ReadJwtToken(token).Payload["given_name"].ToString();
     }
@@ -106,7 +106,7 @@ namespace APIPortal.Controllers
     // GET: api/Store/Inventories
     [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.Inventories)]
-    public async Task<IActionResult> GetAllStoreInventories([FromQuery] int limit, int page)
+    public async Task<IActionResult> GetAllStoreInventories([FromQuery] int limit, int page, string? orderby, int filter)
     {
       var userFromDB = await _userManager.FindByNameAsync(given_name);
       Guid p_storeID = Guid.Parse(userFromDB.Id);
@@ -116,9 +116,15 @@ namespace APIPortal.Controllers
         var _listInventories = await _invenBL.GetStoreInventoryByStoreID(p_storeID);
         if (_listInventories.Count != 0)
         {
+          if (orderby != null || filter != 0)
+          {
+            OrderByAndFilterExtension _orderFilter = new OrderByAndFilterExtension();
+
+            _listInventories = _orderFilter.OrderByAndFilterExtensionForInventory(_listInventories, orderby, filter);
+          }
           if (limit != 0)
           {
-            PaggedExtensions<Inventory> _inven = new PaggedExtensions<Inventory>();
+            PaginationExtensions<Inventory> _inven = new PaginationExtensions<Inventory>();
             var result = _inven.Pagged(_listInventories, limit, page);
             Log.Information("Route: " + RouteConfigs.Inventories);
             return Ok(result);
@@ -219,7 +225,7 @@ namespace APIPortal.Controllers
     // GET: api/Store/Orders
     [Authorize(Roles = "StoreManager")]
     [HttpGet(RouteConfigs.StoreOrders)]
-    public async Task<IActionResult> GetAllStoreOrders([FromQuery] int limit, int page)
+    public async Task<IActionResult> GetAllStoreOrders([FromQuery] int limit, int page, string? orderby, string? filter)
     {
       var userFromDB = await _userManager.FindByNameAsync(given_name);
       Guid p_storeID = Guid.Parse(userFromDB.Id);
@@ -229,9 +235,15 @@ namespace APIPortal.Controllers
         var _listOrders = await _orderBL.GetAllOrdersByStoreID(p_storeID);
         if (_listOrders.Count != 0)
         {
+          if (orderby != null || filter != null)
+          {
+            OrderByAndFilterExtension _orderFilter = new OrderByAndFilterExtension();
+
+            _listOrders = _orderFilter.OrderByAndFilterExtensionForOrder(_listOrders, orderby, filter);
+          }
           if (limit != 0)
           {
-            PaggedExtensions<Order> _order = new PaggedExtensions<Order>();
+            PaginationExtensions<Order> _order = new PaginationExtensions<Order>();
             var result = _order.Pagged(_listOrders, limit, page);
             Log.Information("Route: " + RouteConfigs.StoreOrders);
             return Ok(result);
@@ -402,28 +414,6 @@ namespace APIPortal.Controllers
         Log.Warning("Route: " + RouteConfigs.Tracking);
         Log.Warning(e.Message);
         return StatusCode(406, e);
-      }
-    }
-
-
-
-
-
-    // GET: api/Orders
-    [Authorize(Roles = "StoreManager")]
-    [HttpGet(RouteConfigs.StoreOrdersFilter)]
-    public async Task<IActionResult> GetAllStoreOrdersWithFilter([FromBody] Guid p_storeID, string p_filter)
-    {
-      try
-      {
-        Log.Information("Route: " + RouteConfigs.StoreOrdersFilter);
-        return Ok(await _orderBL.GetAllOrdersByStoreIDWithFilter(p_storeID, p_filter));
-      }
-      catch (Exception e)
-      {
-        Log.Warning("Route: " + RouteConfigs.StoreOrdersFilter);
-        Log.Warning(e.Message);
-        return NotFound(e);
       }
     }
   }

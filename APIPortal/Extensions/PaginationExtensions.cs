@@ -2,7 +2,7 @@ using APIPortal.DataTransferObject;
 
 namespace APIPortal.Extensions
 {
-  public class PaggedExtensions<T>
+  public class PaginationExtensions<T>
   {
     public ResponePage<T> Pagged(List<T> p_list, int limit, int page)
     {

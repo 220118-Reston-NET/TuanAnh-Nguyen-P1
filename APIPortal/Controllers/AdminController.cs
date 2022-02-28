@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using APIPortal.Extensions;
 
 namespace APIPortal.Controllers
 {
@@ -38,12 +39,23 @@ namespace APIPortal.Controllers
     // GET: api/Admin/Customers
     [Authorize(Roles = "Admin")]
     [HttpGet(RouteConfigs.Customers)]
-    public async Task<IActionResult> GetAllCustomers()
+    public async Task<IActionResult> GetAllCustomers([FromQuery] int limit, int page)
     {
       try
       {
-        Log.Information("Route: " + RouteConfigs.Customers);
-        return Ok(await _cusBL.GetAllCustomerProfile());
+        var _listCustomers = await _cusBL.GetAllCustomerProfile();
+        if (_listCustomers.Count != 0)
+        {
+          if (limit != 0)
+          {
+            PaginationExtensions<CustomerProfile> _customer = new PaginationExtensions<CustomerProfile>();
+            var result = _customer.Pagged(_listCustomers, limit, page);
+            Log.Information("Route: " + RouteConfigs.Customers);
+            return Ok(result);
+          }
+          return Ok(_listCustomers);
+        }
+        return NotFound();
       }
       catch (Exception e)
       {
@@ -57,12 +69,23 @@ namespace APIPortal.Controllers
 
     [Authorize(Roles = "Admin")]
     [HttpGet(RouteConfigs.Stores)]
-    public async Task<IActionResult> GetAllStores()
+    public async Task<IActionResult> GetAllStores([FromQuery] int limit, int page)
     {
       try
       {
-        Log.Information("Route: " + RouteConfigs.Stores);
-        return Ok(await _storeBL.GetAllStoresProfile());
+        var _listStores = await _storeBL.GetAllStoresProfile();
+        if (_listStores.Count != 0)
+        {
+          if (limit != 0)
+          {
+            PaginationExtensions<StoreFrontProfile> _storeF = new PaginationExtensions<StoreFrontProfile>();
+            var result = _storeF.Pagged(_listStores, limit, page);
+            Log.Information("Route: " + RouteConfigs.Stores);
+            return Ok(result);
+          }
+          return Ok(_listStores);
+        }
+        return NotFound();
       }
       catch (Exception e)
       {
@@ -75,12 +98,23 @@ namespace APIPortal.Controllers
     // GET: api/Admin/Products
     [Authorize(Roles = "Admin")]
     [HttpGet(RouteConfigs.Products)]
-    public async Task<IActionResult> GetProducts()
+    public async Task<IActionResult> GetProducts([FromQuery] int limit, int page)
     {
       try
       {
-        Log.Information("Route: " + RouteConfigs.Products);
-        return Ok(await _adminBL.GetAllProducts());
+        var _listProducts = await _adminBL.GetAllProducts();
+        if (_listProducts.Count != 0)
+        {
+          if (limit != 0)
+          {
+            PaginationExtensions<Product> _product = new PaginationExtensions<Product>();
+            var result = _product.Pagged(_listProducts, limit, page);
+            Log.Information("Route: " + RouteConfigs.Products);
+            return Ok(result);
+          }
+          return Ok(_listProducts);
+        }
+        return NotFound();
       }
       catch (Exception e)
       {
