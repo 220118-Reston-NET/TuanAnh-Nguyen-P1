@@ -7,15 +7,18 @@ namespace APIPortal.Consts
     public const string Login = "Login";
 
     //ADMIN
-    public const string Product = "Product";
+    public const string Customers = "Customers";
+    public const string Stores = "Stores";
+    public const string GetProduct = "Products/{p_prodID}";
+    public const string AddProduct = "Products";
+    public const string UpdateProduct = "Products/{p_prodID}";
     public const string Products = "Products";
     public const string AddRoleToUser = "AddRoleToUser";
 
     //CUSTOMER
-    public const string CustomerProfile = "CustomerProfile";
-    public const string Customers = "Customers";
-    public const string CustomerOrder = "CustomerOrder";
-    public const string CustomerOrders = "CustomerOrders";
+    public const string CustomerProfile = "Profile";
+    public const string CustomerOrders = "Orders";
+    public const string CustomerOrder = "Orders/{p_orderID}";
     public const string CustomerOrdersFilter = "CustomerOrdersFilter";
 
     //HOME
@@ -23,17 +26,16 @@ namespace APIPortal.Consts
     public const string SearchStore = "SearchStore";
 
     //STORE
-    public const string StoreProfile = "StoreProfile";
-    public const string Stores = "Stores";
-    public const string Inventory = "Inventory";
+    public const string StoreProfile = "Profile";
     public const string Inventories = "Inventories";
-    public const string StoreOrders = "StoreOrders";
+    public const string Inventory = "Inventories/{p_prodID}";
+    public const string StoreOrders = "Orders";
+    public const string StoreOrder = "Orders/{p_orderID}";
+    public const string AcceptOrder = "Orders/{p_orderID}/accept";
+    public const string RejectOrder = "Orders/{p_orderID}/reject";
+    public const string CompleteOrder = "Orders/{p_orderID}/complete";
+    public const string Trackings = "Orders/{p_orderID}/Trackings";
+    public const string Tracking = "Orders/{p_orderID}/Trackings/{p_trackingID}";
     public const string StoreOrdersFilter = "StoreOrdersFilter";
-    public const string StoreOrder = "StoreOrder";
-    public const string AcceptOrder = "AcceptOrder";
-    public const string RejectOrder = "RejectOrder";
-    public const string CompleteOrder = "CompleteOrder";
-    public const string Tracking = "Tracking";
-    public const string Trackings = "Trackings";
   }
 }

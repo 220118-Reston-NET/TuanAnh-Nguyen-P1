@@ -11,7 +11,7 @@
     public DateTime DateOfBirth { get; set; }
     public CustomerProfile()
     {
-      CustomerID = Guid.NewGuid();
+      CustomerID = Guid.Empty;
       FirstName = "";
       LastName = "";
       Address = "";

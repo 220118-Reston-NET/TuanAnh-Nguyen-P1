@@ -7,7 +7,7 @@ namespace Model
     public string Address { get; set; }
     public StoreFrontProfile()
     {
-      StoreID = Guid.NewGuid();
+      StoreID = Guid.Empty;
       Name = "";
       Address = "";
     }

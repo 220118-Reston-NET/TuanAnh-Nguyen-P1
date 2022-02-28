@@ -45,6 +45,7 @@ namespace APIPortal.Controllers
       _cusBL = p_cusBL;
     }
 
+    // POST: api/Authentication/Register
     [HttpPost(RouteConfigs.Register)]
     public async Task<IActionResult> Register([FromBody] RegisterForm registerFrom)
     {
@@ -110,6 +111,7 @@ namespace APIPortal.Controllers
       }
     }
 
+    // POST: api/Authentication/Login
     [HttpPost(RouteConfigs.Login)]
     public async Task<IActionResult> Login([FromBody] LoginForm loginForm)
     {

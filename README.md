@@ -21,6 +21,7 @@
 - [License](#license)
 
 # Features
+>RequestRateLimit: 10/min
 
 I seperated all of my methods into 5 main Controllers which have its own Roles to access:
 ## Authentication Controller

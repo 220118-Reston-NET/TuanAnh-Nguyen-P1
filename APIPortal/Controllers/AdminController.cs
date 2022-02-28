@@ -19,20 +19,60 @@ namespace APIPortal.Controllers
   {
     private readonly IAdminServiceBL _adminBL;
     private readonly IStoreManagementBL _storeBL;
+    private readonly ICustomerManagementBL _cusBL;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly UserManager<IdentityUser> _userManager;
     public AdminController(IAdminServiceBL p_adminBL,
                             RoleManager<IdentityRole> p_roleManager,
                             UserManager<IdentityUser> p_userManager,
-                            IStoreManagementBL p_storeBL)
+                            IStoreManagementBL p_storeBL,
+                            ICustomerManagementBL p_cusBL)
     {
       _adminBL = p_adminBL;
       _roleManager = p_roleManager;
       _userManager = p_userManager;
       _storeBL = p_storeBL;
+      _cusBL = p_cusBL;
     }
 
-    // GET: api/Products
+    // GET: api/Admin/Customers
+    [Authorize(Roles = "Admin")]
+    [HttpGet(RouteConfigs.Customers)]
+    public async Task<IActionResult> GetAllCustomers()
+    {
+      try
+      {
+        Log.Information("Route: " + RouteConfigs.Customers);
+        return Ok(await _cusBL.GetAllCustomerProfile());
+      }
+      catch (Exception e)
+      {
+        Log.Warning("Route: " + RouteConfigs.Customers);
+        Log.Warning(e.Message);
+        return NotFound(e);
+      }
+    }
+
+    // GET: api/Admin/Stores
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet(RouteConfigs.Stores)]
+    public async Task<IActionResult> GetAllStores()
+    {
+      try
+      {
+        Log.Information("Route: " + RouteConfigs.Stores);
+        return Ok(await _storeBL.GetAllStoresProfile());
+      }
+      catch (Exception e)
+      {
+        Log.Warning("Route: " + RouteConfigs.Stores);
+        Log.Warning(e.Message);
+        return NotFound(e);
+      }
+    }
+
+    // GET: api/Admin/Products
     [Authorize(Roles = "Admin")]
     [HttpGet(RouteConfigs.Products)]
     public async Task<IActionResult> GetProducts()
@@ -50,65 +90,72 @@ namespace APIPortal.Controllers
       }
     }
 
-    // GET: api/Product/5
+    // GET: api/Admin/Products/5
     [Authorize(Roles = "Admin")]
-    [HttpGet(RouteConfigs.Product)]
-    public async Task<IActionResult> GetProductByID([FromQuery] Guid id)
+    [HttpGet(RouteConfigs.GetProduct)]
+    public async Task<IActionResult> GetProductByID(Guid p_prodID)
     {
       try
       {
-        Log.Information("Route: " + RouteConfigs.Product);
-        return Ok(await _adminBL.GetProductByID(id));
+        var result = await _adminBL.GetProductByID(p_prodID);
+
+        if (result != null)
+        {
+          Log.Information("Route: " + RouteConfigs.GetProduct);
+          return Ok(result);
+        }
+        return NotFound();
       }
       catch (Exception e)
       {
-        Log.Warning("Route: " + RouteConfigs.Product);
+        Log.Warning("Route: " + RouteConfigs.GetProduct);
         Log.Warning(e.Message);
         return NotFound(e);
       }
     }
 
-    // POST: api/Product
+    // POST: api/Admin/Products
     [Authorize(Roles = "Admin")]
-    [HttpPost(RouteConfigs.Product)]
+    [HttpPost(RouteConfigs.AddProduct)]
     public async Task<IActionResult> AddProduct([FromBody] Product p_prod)
     {
       Task taskAddProduct = _adminBL.AddNewProduct(p_prod);
       try
       {
         await taskAddProduct;
-        Log.Warning("Route: " + RouteConfigs.Product);
+        Log.Warning("Route: " + RouteConfigs.AddProduct);
         return Created("Created a new product success!", p_prod);
       }
       catch (Exception e)
       {
-        Log.Warning("Route: " + RouteConfigs.Product);
+        Log.Warning("Route: " + RouteConfigs.AddProduct);
         Log.Warning(e.Message);
         return BadRequest(new { Results = "This product is already in the system!" });
       }
     }
 
-    // PUT: api/Product
+    // PUT: api/Admin/Products/5
     [Authorize(Roles = "Admin")]
-    [HttpPut(RouteConfigs.Product)]
-    public async Task<IActionResult> UpdateProduct([FromBody] Product p_prod)
+    [HttpPut(RouteConfigs.UpdateProduct)]
+    public async Task<IActionResult> UpdateProduct(Guid p_prodID, [FromBody] Product p_prod)
     {
+      p_prod.ProductID = p_prodID;
       Task taskUpdateProduct = _adminBL.UpdateProduct(p_prod);
       try
       {
         await taskUpdateProduct;
-        Log.Information("Route: " + RouteConfigs.Product);
+        Log.Information("Route: " + RouteConfigs.UpdateProduct);
         return Ok(new { Results = "Updated Succesfully!" });
       }
       catch (Exception e)
       {
-        Log.Warning("Route: " + RouteConfigs.Product);
+        Log.Warning("Route: " + RouteConfigs.UpdateProduct);
         Log.Warning(e.Message);
         return BadRequest(new { Results = "Cannot find the product detail to update! Please check the Product ID" });
       }
     }
 
-    // POST: api/Admin/UserRole
+    // POST: api/Admin/AddRoleToUser
     [Authorize(Roles = "Admin")]
     [HttpPost(RouteConfigs.AddRoleToUser)]
     public async Task<IActionResult> AddStoreManagerRoleToUser([FromQuery] string p_username)

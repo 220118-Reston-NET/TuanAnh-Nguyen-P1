@@ -45,6 +45,11 @@ namespace BL.Implements
 
     public async Task CompleteOrderByOrderID(Guid p_orderID)
     {
+      Order _order = await GetOrderByOrderID(p_orderID);
+      if (_order.Shipments.Count == 0)
+      {
+        throw new Exception("Cannot complete the order! Please add shipment to the order before complete it!");
+      }
       await _repo.CompleteOrderByOrderID(p_orderID);
     }
 

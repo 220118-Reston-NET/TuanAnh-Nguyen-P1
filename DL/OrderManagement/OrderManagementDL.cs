@@ -127,6 +127,8 @@ namespace DL.Implements
 
       p_order.OrderID = Guid.NewGuid();
       p_order.createdAt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+      p_order.Status = "Order Placed";
+      p_order.TotalPrice = CalTotalPrice(p_order);
 
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
@@ -138,7 +140,7 @@ namespace DL.Implements
         command.Parameters.AddWithValue("@cusID", p_order.CustomerID);
         command.Parameters.AddWithValue("@storeID", p_order.StoreID);
         command.Parameters.AddWithValue("@totalPrice", p_order.TotalPrice);
-        command.Parameters.AddWithValue("@orderStatus", "Order Placed");
+        command.Parameters.AddWithValue("@orderStatus", p_order.Status);
         command.Parameters.AddWithValue("@createdAt", p_order.createdAt);
 
         await command.ExecuteNonQueryAsync();
@@ -323,14 +325,23 @@ namespace DL.Implements
       string _sqlQuery = @"DELETE FROM LineItems
                           WHERE orderID=@orderID;";
 
+      string _sqlQuery2 = @"UPDATE Orders
+                          SET totalPrice=@totalPrice
+                          WHERE orderID=@orderID;";
+
       using (SqlConnection conn = new SqlConnection(_connectionString))
       {
         await conn.OpenAsync();
 
         SqlCommand command = new SqlCommand(_sqlQuery, conn);
-
         command.Parameters.AddWithValue("@orderID", p_order.OrderID);
+        await command.ExecuteNonQueryAsync();
 
+        p_order.TotalPrice = CalTotalPrice(p_order);
+        p_order.Status = "Order Placed";
+        command = new SqlCommand(_sqlQuery2, conn);
+        command.Parameters.AddWithValue("@orderID", p_order.OrderID);
+        command.Parameters.AddWithValue("@totalPrice", p_order.TotalPrice);
         await command.ExecuteNonQueryAsync();
 
         await AddLineItemsToOrder(p_order);
@@ -356,6 +367,18 @@ namespace DL.Implements
 
         await command.ExecuteNonQueryAsync();
       }
+    }
+
+    protected decimal CalTotalPrice(Order p_order)
+    {
+      decimal _totalPrice = 0m;
+
+      foreach (var item in p_order.Cart)
+      {
+        _totalPrice += item.Quantity * item.PriceAtCheckedOut;
+      }
+
+      return _totalPrice;
     }
   }
 }

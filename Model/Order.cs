@@ -20,9 +20,7 @@ namespace Model
       };
       TotalPrice = 0;
       Status = "";
-      Shipments = new List<Tracking>(){
-        new Tracking()
-      };
+      Shipments = new List<Tracking>();
       createdAt = DateTime.UtcNow;
     }
   }

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using APIPortal.Consts;
+using APIPortal.Extensions;
 using APIPortal.FilterAttributes;
 using BL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Model;
 
 namespace APIPortal.Controllers
 {
@@ -24,7 +26,36 @@ namespace APIPortal.Controllers
       _adminBL = p_adminBL;
       _storeBL = p_storeBL;
     }
-    // GET: api/SearchProducts
+
+    // GET: api/Home/Products
+    [HttpGet(RouteConfigs.Products)]
+    public async Task<IActionResult> GetAllProducts([FromQuery] int limit, int page)
+    {
+      try
+      {
+        var _listProducts = await _adminBL.GetAllProducts();
+        if (_listProducts.Count != 0)
+        {
+          if (limit != 0)
+          {
+            PaggedExtensions<Product> _product = new PaggedExtensions<Product>();
+            var result = _product.Pagged(_listProducts, limit, page);
+            Log.Information("Route: " + RouteConfigs.Products);
+            return Ok(result);
+          }
+          return Ok(_listProducts);
+        }
+        return NotFound();
+      }
+      catch (Exception e)
+      {
+        Log.Warning("Route: " + RouteConfigs.Products);
+        Log.Warning(e.Message);
+        return NotFound(e);
+      }
+    }
+
+    // GET: api/Home/SearchProducts
     [HttpGet(RouteConfigs.SearchProduct)]
     public async Task<IActionResult> SearchProductByName([FromQuery] string p_prodName)
     {
@@ -41,7 +72,7 @@ namespace APIPortal.Controllers
       }
     }
 
-    // GET: api/SearchStores
+    // GET: api/Home/SearchStores
     [HttpGet(RouteConfigs.SearchStore)]
     public async Task<IActionResult> SearchStoreByName([FromQuery] string p_storeName)
     {
