@@ -39,11 +39,16 @@ namespace APIPortal.Controllers
     // GET: api/Admin/Customers
     [Authorize(Roles = "Admin")]
     [HttpGet(RouteConfigs.Customers)]
-    public async Task<IActionResult> GetAllCustomers([FromQuery] int limit, int page)
+    public async Task<IActionResult> GetAllCustomers([FromQuery] int limit, int page, string? name)
     {
       try
       {
-        var _listCustomers = await _cusBL.GetAllCustomerProfile();
+        List<CustomerProfile> _listCustomers = new List<CustomerProfile>();
+        _listCustomers = await _cusBL.GetAllCustomerProfile();
+        if (name != null)
+        {
+          _listCustomers = _listCustomers.FindAll(p => p.FirstName.ToLower().Contains(name.ToLower()) || p.LastName.ToLower().Contains(name.ToLower()));
+        }
         if (_listCustomers.Count != 0)
         {
           if (limit != 0)
@@ -69,11 +74,15 @@ namespace APIPortal.Controllers
 
     [Authorize(Roles = "Admin")]
     [HttpGet(RouteConfigs.Stores)]
-    public async Task<IActionResult> GetAllStores([FromQuery] int limit, int page)
+    public async Task<IActionResult> GetAllStores([FromQuery] int limit, int page, string? name)
     {
       try
       {
-        var _listStores = await _storeBL.GetAllStoresProfile();
+        List<StoreFrontProfile> _listStores = await _storeBL.GetAllStoresProfile();
+        if (name != null)
+        {
+          _listStores = _listStores.FindAll(p => p.Name.ToLower().Contains(name.ToLower()));
+        }
         if (_listStores.Count != 0)
         {
           if (limit != 0)
@@ -98,11 +107,16 @@ namespace APIPortal.Controllers
     // GET: api/Admin/Products
     [Authorize(Roles = "Admin")]
     [HttpGet(RouteConfigs.Products)]
-    public async Task<IActionResult> GetProducts([FromQuery] int limit, int page)
+    public async Task<IActionResult> GetProducts([FromQuery] int limit, int page, string? name)
     {
       try
       {
-        var _listProducts = await _adminBL.GetAllProducts();
+        List<Product> _listProducts = await _adminBL.GetAllProducts();
+        if (name != null)
+        {
+          _listProducts = _listProducts.FindAll(p => p.Name.ToLower().Contains(name.ToLower()));
+        }
+
         if (_listProducts.Count != 0)
         {
           if (limit != 0)

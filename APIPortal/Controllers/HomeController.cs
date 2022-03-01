@@ -28,41 +28,31 @@ namespace APIPortal.Controllers
     }
 
     // GET: api/Home/Products
-    [HttpGet(RouteConfigs.Products)]
-    public async Task<IActionResult> GetAllProducts([FromQuery] int limit, int page)
+    [HttpGet(RouteConfigs.SearchProduct)]
+    public async Task<IActionResult> GetAllProducts([FromQuery] int limit, int page, string? name)
     {
       try
       {
-        var _listProducts = await _adminBL.GetAllProducts();
+        List<Product> _listProducts = new List<Product>();
+        _listProducts = await _adminBL.GetAllProducts();
+
+        if (name != null)
+        {
+          _listProducts = _listProducts.FindAll(p => p.Name.ToLower().Contains(name.ToLower()));
+        }
+
         if (_listProducts.Count != 0)
         {
           if (limit != 0)
           {
             PaginationExtensions<Product> _product = new PaginationExtensions<Product>();
             var result = _product.Pagged(_listProducts, limit, page);
-            Log.Information("Route: " + RouteConfigs.Products);
+            Log.Information("Route: " + RouteConfigs.SearchProduct);
             return Ok(result);
           }
           return Ok(_listProducts);
         }
         return NotFound();
-      }
-      catch (Exception e)
-      {
-        Log.Warning("Route: " + RouteConfigs.Products);
-        Log.Warning(e.Message);
-        return NotFound(e);
-      }
-    }
-
-    // GET: api/Home/SearchProducts
-    [HttpGet(RouteConfigs.SearchProduct)]
-    public async Task<IActionResult> SearchProductByName([FromQuery] string p_prodName)
-    {
-      try
-      {
-        Log.Information("Route: " + RouteConfigs.SearchProduct);
-        return Ok(await _adminBL.SearchProductByName(p_prodName));
       }
       catch (Exception e)
       {
@@ -72,14 +62,31 @@ namespace APIPortal.Controllers
       }
     }
 
-    // GET: api/Home/SearchStores
+    // GET: api/Home/Stores
     [HttpGet(RouteConfigs.SearchStore)]
-    public async Task<IActionResult> SearchStoreByName([FromQuery] string p_storeName)
+    public async Task<IActionResult> SearchStoreByName([FromQuery] int limit, int page, string? name)
     {
       try
       {
-        Log.Information("Route: " + RouteConfigs.SearchStore);
-        return Ok(await _storeBL.SearchStoreByName(p_storeName));
+        List<StoreFrontProfile> _listStores = new List<StoreFrontProfile>();
+        _listStores = await _storeBL.GetAllStoresProfile();
+        if (name != null)
+        {
+          _listStores = _listStores.FindAll(p => p.Name.ToLower().Contains(name.ToLower()));
+        }
+
+        if (_listStores.Count != 0)
+        {
+          if (limit != 0)
+          {
+            PaginationExtensions<StoreFrontProfile> _storeF = new PaginationExtensions<StoreFrontProfile>();
+            var result = _storeF.Pagged(_listStores, limit, page);
+            Log.Information("Route: " + RouteConfigs.SearchStore);
+            return Ok(result);
+          }
+          return Ok(_listStores);
+        }
+        return NotFound();
       }
       catch (Exception e)
       {

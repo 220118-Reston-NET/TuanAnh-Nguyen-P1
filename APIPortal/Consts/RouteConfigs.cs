@@ -22,8 +22,8 @@ namespace APIPortal.Consts
     public const string CustomerOrdersFilter = "CustomerOrdersFilter";
 
     //HOME
-    public const string SearchProduct = "SearchProduct";
-    public const string SearchStore = "SearchStore";
+    public const string SearchProduct = "Products";
+    public const string SearchStore = "Stores";
 
     //STORE
     public const string StoreProfile = "Profile";

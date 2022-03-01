@@ -121,7 +121,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Login);
         Log.Warning("Login Failed! User didn't exist in the database!");
-        return BadRequest();
+        return BadRequest("Login Failed! User didn't exist in the database!");
       }
 
       var result = await _signInManager.CheckPasswordSignInAsync(userFromDB, loginForm.Password, false);
@@ -130,7 +130,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.Login);
         Log.Warning("Login Failed! Password didn't matched in the database!");
-        return BadRequest();
+        return BadRequest("Login Failed! Password didn't matched in the database!");
       }
       var roles = await _userManager.GetRolesAsync(userFromDB);
 
