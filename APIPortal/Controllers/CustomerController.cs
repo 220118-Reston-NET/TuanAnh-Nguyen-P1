@@ -226,7 +226,7 @@ namespace APIPortal.Controllers
       try
       {
         var _listOrder = await _orderBL.GetAllOrders();
-        var result = _listOrder.Find(p => p.CustomerID.Equals(p_cusID) & p.OrderID.Equals(p_orderID));
+        var result = _listOrder.Find(p => p.CustomerID.Equals(p_cusID) && p.OrderID.Equals(p_orderID));
 
         if (result != null)
         {

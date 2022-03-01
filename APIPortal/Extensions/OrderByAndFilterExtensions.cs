@@ -64,7 +64,7 @@ namespace APIPortal.Extensions
       {
         return _result;
       }
-      else if (filter == 0)
+      else
       {
         _result = _result.FindAll(p => p.Quantity > filter);
       }

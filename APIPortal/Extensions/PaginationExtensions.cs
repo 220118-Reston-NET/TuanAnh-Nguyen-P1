@@ -12,7 +12,7 @@ namespace APIPortal.Extensions
       }
       int choosenPage = page;
       var pageResults = limit;
-      var pageCount = Math.Ceiling(p_list.Count() / (double)pageResults);
+      var pageCount = Math.Ceiling(p_list.Count / (double)pageResults);
 
       var pagedData = p_list.Skip((page - 1) * pageResults).Take(pageResults).ToList();
 
@@ -20,7 +20,7 @@ namespace APIPortal.Extensions
       {
         TotalPages = (int)pageCount,
         CurrentPage = choosenPage,
-        TotalRecords = p_list.Count(),
+        TotalRecords = p_list.Count,
         Data = pagedData
       };
       return result;
