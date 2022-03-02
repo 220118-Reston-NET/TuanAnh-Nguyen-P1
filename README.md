@@ -14,7 +14,7 @@
   - [Store Controller](#store-controller)
   - [Home Controller](#home-controller)
 - [Technologies](#technologies)
-- [Getting start with API Documentation](#getting-start-with-api-documentation)
+- [Getting started with API Documentation](#getting-started-with-api-documentation)
   - [API base URL](#api-base-url)
   - [Sample REST API request](#sample-rest-api-request)
   - [Setting additional query parameters](#setting-additional-query-parameters)
@@ -72,7 +72,7 @@ I seperated all of my methods into 5 main Controllers which have its own Roles t
 - [Git](https://git-scm.com)
 - [Markdown](https://daringfireball.net/projects/markdown/)
 
-# Getting start with API Documentation
+# Getting started with API Documentation
 ## API base URL
 ```url
 https://p1revature.azurewebsites.net/api
@@ -81,7 +81,7 @@ https://p1revature.azurewebsites.net/api
 ## Sample REST API request
 To retrieve information about the product, send a <code>GET</code> request to <code>Home/Products</code>:
 
-Retrieve the all the products information: 
+Retrieve all the products information: 
 
 ```curl
 curl -X 'GET' \
