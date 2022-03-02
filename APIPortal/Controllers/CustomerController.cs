@@ -19,7 +19,7 @@ namespace APIPortal.Controllers
 {
   [Authorize]
   [Route("api/[controller]")]
-  [RequestRateLimit(Name = "api/Home", MaximumRequests = 10, Duration = 60)]
+  [RequestRateLimit(Name = "api/Customer", MaximumRequests = 10, Duration = 60)]
   [ApiController]
   public class CustomerController : ControllerBase
   {

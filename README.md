@@ -99,7 +99,7 @@ For retrieving more information from your REST API requests, set query parameter
 
 ## Request Limit Rate
 I limit the request rate for every APIs is 10 requests/min/ipaddress.
-If you try to send the request more than the Limit Rate, you might get the <code>409</code> status code that will tell you reach the limit.
+If you try to send the request more than the Limit Rate, you might get the <code>429</code> status code that will tell you reach the limit.
 
 ## API references
 For more API references, please access [API Documentation](https://p1revature.readme.io/).

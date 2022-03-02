@@ -19,7 +19,6 @@ namespace APIPortal.Consts
     public const string CustomerProfile = "Profile";
     public const string CustomerOrders = "Orders";
     public const string CustomerOrder = "Orders/{p_orderID}";
-    public const string CustomerOrdersFilter = "CustomerOrdersFilter";
 
     //HOME
     public const string SearchProduct = "Products";
@@ -36,6 +35,5 @@ namespace APIPortal.Consts
     public const string CompleteOrder = "Orders/{p_orderID}/complete";
     public const string Trackings = "Orders/{p_orderID}/Trackings";
     public const string Tracking = "Orders/{p_orderID}/Trackings/{p_trackingID}";
-    public const string StoreOrdersFilter = "StoreOrdersFilter";
   }
 }
