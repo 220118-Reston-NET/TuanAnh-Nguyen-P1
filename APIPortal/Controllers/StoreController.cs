@@ -401,12 +401,18 @@ namespace APIPortal.Controllers
     // PUT: api/Tracking
     [Authorize(Roles = "StoreManager")]
     [HttpPut(RouteConfigs.Tracking)]
-    public async Task<IActionResult> UpdateTrackingNumber([FromBody] Tracking p_tracking)
+    public async Task<IActionResult> UpdateTrackingNumber(Guid p_orderID, Guid p_trackingID, [FromQuery] string p_trackingNo)
     {
       try
       {
+        Tracking _updatedTracking = new Tracking()
+        {
+          TrackingID = p_trackingID,
+          OrderID = p_orderID,
+          TrackingNumber = p_trackingNo
+        };
         Log.Information("Route: " + RouteConfigs.Tracking);
-        await _orderBL.UpdateTracking(p_tracking);
+        await _orderBL.UpdateTracking(_updatedTracking);
         return Ok();
       }
       catch (Exception e)
