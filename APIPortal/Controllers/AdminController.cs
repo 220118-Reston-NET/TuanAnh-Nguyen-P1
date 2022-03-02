@@ -234,7 +234,7 @@ namespace APIPortal.Controllers
       {
         Log.Warning("Route: " + RouteConfigs.AddRoleToUser);
         Log.Warning(e.Message);
-        return BadRequest();
+        return BadRequest(new { Results = "This username is already a store manager!" });
       }
     }
   }

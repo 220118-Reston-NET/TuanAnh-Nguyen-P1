@@ -15,6 +15,11 @@
   - [Home Controller](#home-controller)
 - [Technologies](#technologies)
 - [Getting start with API Documentation](#getting-start-with-api-documentation)
+  - [API base URL](#api-base-url)
+  - [Sample REST API request](#sample-rest-api-request)
+  - [Setting additional query parameters](#setting-additional-query-parameters)
+  - [Request Limit Rate](#request-limit-rate)
+  - [API references](#api-references)
 - [Changelog](#changelog)
   - [v1.0.0](#v100)
 - [Contributing](#contributing)
@@ -68,8 +73,36 @@ I seperated all of my methods into 5 main Controllers which have its own Roles t
 - [Markdown](https://daringfireball.net/projects/markdown/)
 
 # Getting start with API Documentation
+## API base URL
+```url
+https://p1revature.azurewebsites.net/api
+```
 
-[API Documentation](https://p1revature.readme.io/)
+## Sample REST API request
+To retrieve information about the product, send a <code>GET</code> request to <code>Home/Products</code>:
+
+Retrieve the all the products information: 
+
+```curl
+curl -X 'GET' \
+  'https://p1revature.azurewebsites.net/api/Home/Products' \
+  -H 'accept: */*'
+```
+
+## Setting additional query parameters
+
+For retrieving more information from your REST API requests, set query parameters for supported endpoints in the following format.
+
+```curl
+[Endpoint URI]?limit=value&[additionalQueryParameters...]
+```
+
+## Request Limit Rate
+I limit the request rate for every APIs is 10 requests/min/ipaddress.
+If you try to send the request more than the Limit Rate, you might get the <code>409</code> status code that will tell you reach the limit.
+
+## API references
+For more API references, please access [API Documentation](https://p1revature.readme.io/).
 
 # Changelog
 ## v1.0.0

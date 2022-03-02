@@ -19,7 +19,7 @@ namespace APIPortal.Controllers
 {
   [Authorize]
   [Route("api/[controller]")]
-  [RequestRateLimit(Name = "api/Home", MaximumRequests = 5, Duration = 60)]
+  [RequestRateLimit(Name = "api/Home", MaximumRequests = 10, Duration = 60)]
   [ApiController]
   public class CustomerController : ControllerBase
   {
@@ -220,6 +220,7 @@ namespace APIPortal.Controllers
     [HttpPut(RouteConfigs.CustomerOrder)]
     public async Task<IActionResult> UpdateOrder(Guid p_orderID, [FromBody] Order p_order)
     {
+
       var userFromDB = await _userManager.FindByNameAsync(given_name);
       Guid p_cusID = Guid.Parse(userFromDB.Id);
 
@@ -230,6 +231,7 @@ namespace APIPortal.Controllers
 
         if (result != null)
         {
+          p_order.StoreID = result.StoreID;
           p_order.CustomerID = p_cusID;
           p_order.OrderID = p_orderID;
           Log.Information("Route: " + RouteConfigs.CustomerOrder);
